@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/screens/signin_screen.dart';
 import 'package:gharko_doctor/screens/splash_screen.dart';
 
 void main() {
