@@ -18,7 +18,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int _selectedindex=0;
   List<Widget>lstscreens=[
-    const home(),
+    const Home(),
     const Search(),
     const Doctor(),
     const Appointment(),
@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
             label: "Appointments"
           ),
           BottomNavigationBarItem(
-            icon:FaIcon(FontAwesomeIcons.user),//to use icons form fontawesomw icons i have to add dependencises on puspec.ymal
+            icon:FaIcon(FontAwesomeIcons.user),
             label: "profile"
           ),
          
