@@ -83,7 +83,7 @@ flutter:
     - family: openSans
       fonts:
         - asset: assets/fonts/openSans/OpenSans-Bold.ttf
-        - asset: assets/fonts/openSans/OpenSans-Regular.ttf
+        # - asset: assets/fonts/openSans/OpenSans-Regular.ttf
         
   #   - family: Trajan Pro
   #     fonts:
