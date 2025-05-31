@@ -26,7 +26,7 @@ class _SigninScreenState extends State<SigninScreen> {
     if (_formKey.currentState!.validate()) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => DashboardScreen()),
+        MaterialPageRoute(builder: (_) => Dashboard()),
       );
     }
   }
@@ -63,7 +63,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                         const SizedBox(height: 16),
                         Image.asset(
-                          'assets/images/a.png',
+                          'assets/logo/a.png',
                           height: 100,
                           width: 100,
                         ),
