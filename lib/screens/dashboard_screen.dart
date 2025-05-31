@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
           ),
          
         ],
-        backgroundColor: const Color.fromARGB(255, 217, 252, 234),
+        backgroundColor: const Color.fromARGB(255, 254, 254, 254),
         selectedItemColor: Colors.teal,
         unselectedItemColor: const Color.fromARGB(255, 240, 229, 229),
         currentIndex: _selectedindex,

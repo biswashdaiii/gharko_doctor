@@ -9,30 +9,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Dummy list of doctors for the list view
-  final List<Map<String, String>> doctors = [
-    {
-      'name': 'Dr. John Doe',
-      'speciality': 'Dentist',
-      'image': 'https://randomuser.me/api/portraits/men/1.jpg'
-    },
-    {
-      'name': 'Dr. Jane Smith',
-      'speciality': 'Cardiologist',
-      'image': 'https://randomuser.me/api/portraits/women/2.jpg'
-    },
-    {
-      'name': 'Dr. Mike Johnson',
-      'speciality': 'Neurologist',
-      'image': 'https://randomuser.me/api/portraits/men/3.jpg'
-    },
-    {
-      'name': 'Dr. Emily Davis',
-      'speciality': 'Dermatologist',
-      'image': 'https://randomuser.me/api/portraits/women/4.jpg'
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,13 +18,13 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bigger Welcome Container
+              // Welcome Container
               Container(
-                height: 260,
+                height: 300,
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 7, 221, 200),
+                  color: const Color.fromARGB(255, 4, 141, 127),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
@@ -57,20 +33,27 @@ class _HomeState extends State<Home> {
                     const Text(
                       "Welcome back!",
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 50),
                     const Text(
-                      "Let’s find your top doctor",
+                      "Let’s find  ",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 25,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    const Text(
+                      " your Top doctor",
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Search...",
@@ -80,7 +63,8 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 0),
                         suffixIcon: const Icon(Icons.search),
                       ),
                     ),
@@ -88,11 +72,11 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               // Specialities Label
               const Text(
-                "Specialities most relevant to you",
+                "Specialities ",
                 style: TextStyle(
                   fontFamily: 'OpenSans',
                   fontSize: 14,
@@ -100,106 +84,253 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-              const SizedBox(height: 8),
-
+              const SizedBox(height: 20),
               SizedBox(
-                height: 90,
+                height: 80,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    specialityIcon(FontAwesomeIcons.tooth, "Dentist"),
-                    const SizedBox(width: 16),
-                    specialityIcon(FontAwesomeIcons.heartPulse, "Cardiologist"),
-                    const SizedBox(width: 16),
-                    specialityIcon(FontAwesomeIcons.lungs, "Pulmonologist"),
-                    const SizedBox(width: 16),
-                    specialityIcon(FontAwesomeIcons.personWalkingWithCane, "Physiotherapy"),
-                    const SizedBox(width: 16),
-                    specialityIcon(FontAwesomeIcons.brain, "Neurologist"),
-                    const SizedBox(width: 16),
-                    specialityIcon(FontAwesomeIcons.spa, "Dermatologist"),
+                    // Dentist
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 224, 248, 246),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.tooth,
+                              color: Colors.teal,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          "Dentist",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+
+                    // Cardiologist
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 224, 248, 246),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.heartPulse,
+                              color: Colors.teal,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          "Cardiologist",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+
+                    // Pulmonologist
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 224, 248, 246),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.lungs,
+                              color: Colors.teal,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          "Pulmonologist",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+
+                    // Physiotherapy
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 224, 248, 246),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.personWalkingWithCane,
+                              color: Colors.teal,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          "Physiotherapy",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 20),
-
-              // Doctors List Label
               const Text(
-                "Available Doctors",
+                "Recent",
                 style: TextStyle(
-                  fontFamily: 'OpenSans',
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-
               const SizedBox(height: 10),
 
-              // Expanded ListView of Doctors
+              // Doctor List
               Expanded(
-                child: ListView.builder(
-                  itemCount: doctors.length,
-                  itemBuilder: (context, index) {
-                    final doc = doctors[index];
-                    return Card(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                child: ListView(
+                  children: [
+                    Container(
                       margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(doc['image']!),
-                        ),
-                        title: Text(doc['name']!),
-                        subtitle: Text(doc['speciality']!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          // You can add doctor details navigation here later
-                        },
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 224, 248, 246),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    );
-                  },
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset(
+                              'assets/images/2.jpg',
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Dr. Ram Bahadur Thapa',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                'Heart Surgeon',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                'Bir Hospital',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 224, 248, 246),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset(
+                              'assets/images/1.jpg',
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Dr. Rita Thapa Magar',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                'Dentist',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                'Teaching Hospital',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget specialityIcon(IconData iconData, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 224, 248, 246),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: FaIcon(
-              iconData,
-              color: const Color.fromARGB(255, 7, 221, 200),
-              size: 30,
-            ),
-          ),
-        ),
-        const SizedBox(height: 6),
-        SizedBox(
-          width: 70,
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ],
     );
   }
 }
