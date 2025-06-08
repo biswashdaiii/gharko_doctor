@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const SplashScreenView(), // Start from signin screen
+      home: const SplashScreenView(), 
     );
   }
 }

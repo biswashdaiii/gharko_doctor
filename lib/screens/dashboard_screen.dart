@@ -40,8 +40,8 @@ class _DashboardState extends State<Dashboard> {
             
           ),
           BottomNavigationBarItem(
-            icon:Icon(Icons.search),
-            label: "Search"
+            icon:FaIcon(FontAwesomeIcons.comment),
+            label: "chat"
           ),
           BottomNavigationBarItem(
             icon:FaIcon(FontAwesomeIcons.stethoscope),//to use icons form fontawesomw icons i have to add dependencises on puspec.ymal
@@ -59,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
         ],
         backgroundColor: const Color.fromARGB(255, 254, 254, 254),
         selectedItemColor: Colors.teal,
-        unselectedItemColor: const Color.fromARGB(255, 240, 229, 229),
+        unselectedItemColor: const Color.fromARGB(255, 106, 88, 88),
         currentIndex: _selectedindex,
         onTap: (index){
           setState(() {
