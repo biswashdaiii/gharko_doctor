@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
-import 'package:gharko_doctor/screens/signup_screen.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});

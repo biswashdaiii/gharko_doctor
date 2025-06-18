@@ -1,17 +1,12 @@
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/screens/signin_screen.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
 import 'package:lottie/lottie.dart';
 
-class SplashScreenView extends StatefulWidget {
+class SplashScreenView extends StatelessWidget {
   const SplashScreenView({super.key});
 
-  @override
-  State<SplashScreenView> createState() => _SplashScreenViewState();
-}
-
-class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(

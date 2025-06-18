@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/screens/splash_screen.dart';
+import 'package:gharko_doctor/features/splash/presentation/view/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
