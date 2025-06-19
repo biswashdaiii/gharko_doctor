@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 sealed class SignupEvent {
   get context => null;
 }
-class SignupUserEvent extends SignupEvent {
+class RegisterUserEvent extends SignupEvent {
   final String username;
   final String password;
   final String confirmPassword;
   final String phone;
     final BuildContext context;
 
-  SignupUserEvent({
+  RegisterUserEvent({
     required this.username,
     required this.phone,
     required this.password,

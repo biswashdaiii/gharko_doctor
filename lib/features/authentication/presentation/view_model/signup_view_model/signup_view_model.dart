@@ -12,45 +12,45 @@ class SignupViewModel extends Bloc<SignupEvent,SignupState>{
     this._userRegisterUseCase,
 
   ):super(SignupState.initial()){
-    on<SignupEvent>(_onRegisterUser);
+    on<RegisterUserEvent>(_onRegisterUser);
   }
   Future<void> _onRegisterUser(
-    SignupEvent event,
-    Emitter<SignupState> emit,
-  ) async {
-    emit(state.copyWith(isLoading: true ));
-    
+  RegisterUserEvent event,
+  Emitter<SignupState> emit,
+) async {
+  emit(state.copyWith(isLoading: true));
 
-    final result = await _userRegisterUseCase(
-      RegisterUserParams(
-        username: event.username,
-        phone: event.phone,
-        password: event.password,
-        email:event.email,
-      ),
-    );
-    result.fold(
-      (failure) {
-        emit(state.copyWith(
-          isLoading: false,
-          isSuccess: false,
-        ));
-        showMySnackBar(
-          context: event.context,
-          message: failure.message,
-          color: Colors.red,
-        );
-      },
-      (r) {
-        emit(state.copyWith(
-          isLoading: false,
-          isSuccess: true,
-        ));
-         showMySnackBar(
-          context: event.context,
-          message: "Registration Successful",
-        );
-      },
-    );
-  }
+  final result = await _userRegisterUseCase(
+    RegisterUserParams(
+      username: event.username,
+      phone: event.phone,
+      password: event.password,
+      
+    ),
+  );
+
+  result.fold(
+    (failure) {
+      emit(state.copyWith(
+        isLoading: false,
+        isSuccess: false,
+      ));
+      showMySnackBar(
+        context: event.context,
+        message: failure.message,
+        color: Colors.teal,
+      );
+    },
+    (r) {
+      emit(state.copyWith(
+        isLoading: false,
+        isSuccess: true,
+      ));
+      showMySnackBar(
+        context: event.context,
+        message: "Registration Successful",
+      );
+    },
+  );
+}
 }
