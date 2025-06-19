@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/features/splash/presentation/view/splash_screen.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const SplashScreenView(), 
+      home:  SigninScreen(), 
     );
   }
 }

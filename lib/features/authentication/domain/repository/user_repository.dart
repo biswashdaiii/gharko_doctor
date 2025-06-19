@@ -9,6 +9,6 @@ abstract interface class IUserRepository {
     String username,
     String password,
   );
-  UserEntity?getUser(String email);
+  UserEntity?getCurrentUser(String email);
 
 }

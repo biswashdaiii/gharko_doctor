@@ -2,27 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
-
-  @override
-  State<SigninScreen> createState() => _SigninScreenState();
-}
-
-class _SigninScreenState extends State<SigninScreen> {
+class SigninScreen extends StatelessWidget {
+  SigninScreen({super.key});
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _obscurePassword = true;
+  final _obscurePassword = ValueNotifier<bool>(true);
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  void validateAndLogin() {
+  void validateAndLogin(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       Navigator.pushReplacement(
         context,
@@ -96,37 +83,41 @@ class _SigninScreenState extends State<SigninScreen> {
                                   },
                                 ),
                                 const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: passwordController,
-                                  obscureText: _obscurePassword,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _obscurePassword
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: _obscurePassword,
+                                  builder: (context, obscure, _) {
+                                    return TextFormField(
+                                      controller: passwordController,
+                                      obscureText: obscure,
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            obscure
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                          ),
+                                          onPressed: () {
+                                            _obscurePassword.value = !obscure;
+                                          },
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscurePassword = !_obscurePassword;
-                                        });
+                                      validator: (value) {
+                                        if (value == null || value.length < 6) {
+                                          return 'Password must be at least 6 characters';
+                                        }
+                                        return null;
                                       },
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.length < 6) {
-                                      return 'Password must be at least 6 characters';
-                                    }
-                                    return null;
+                                    );
                                   },
                                 ),
                                 const SizedBox(height: 24),
                                 ElevatedButton(
-                                  onPressed: validateAndLogin,
+                                  onPressed: () => validateAndLogin(context),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.teal,
                                     minimumSize: const Size(double.infinity, 50),
@@ -150,7 +141,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => const SignupPage(),
+                                    builder: (_) =>  SignupPage(),
                                   ),
                                 );
                               },

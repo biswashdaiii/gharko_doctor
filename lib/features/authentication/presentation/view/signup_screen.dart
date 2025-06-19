@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
-
-  @override
-  State<SignupPage> createState() => _SignupPageState();
-}
-
-class _SignupPageState extends State<SignupPage> {
+class SignupPage extends StatelessWidget {
+  SignupPage({super.key});
   final _formKey = GlobalKey<FormState>();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  final _obscurePassword = ValueNotifier<bool>(true);
+  final _obscureConfirmPassword = ValueNotifier<bool>(true);
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +54,26 @@ class _SignupPageState extends State<SignupPage> {
                         _buildTextField("Last Name"),
                         _buildTextField("Email"),
                         _buildTextField("Phone Number"),
-                        _buildPasswordField("Create Password", _obscurePassword,
-                            () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        }),
-                        _buildPasswordField(
-                            "Confirm Password", _obscureConfirmPassword, () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        }),
+                        ValueListenableBuilder<bool>(
+                          valueListenable: _obscurePassword,
+                          builder: (context, obscure, _) {
+                            return _buildPasswordField(
+                              "Create Password",
+                              obscure,
+                              () => _obscurePassword.value = !obscure,
+                            );
+                          },
+                        ),
+                        ValueListenableBuilder<bool>(
+                          valueListenable: _obscureConfirmPassword,
+                          builder: (context, obscure, _) {
+                            return _buildPasswordField(
+                              "Confirm Password",
+                              obscure,
+                              () => _obscureConfirmPassword.value = !obscure,
+                            );
+                          },
+                        ),
                         const SizedBox(height: 20),
                         SizedBox(
                           width: double.infinity,
@@ -89,7 +91,7 @@ class _SignupPageState extends State<SignupPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const SigninScreen()),
+                                           SigninScreen()),
                                 );
                               }
                             },
@@ -114,11 +116,11 @@ class _SignupPageState extends State<SignupPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const SigninScreen()),
+                                         SigninScreen()),
                               );
                             },
-                            child: Text.rich(
-                              const TextSpan(
+                            child: const Text.rich(
+                              TextSpan(
                                 text: "Already have an account? ",
                                 children: [
                                   TextSpan(
