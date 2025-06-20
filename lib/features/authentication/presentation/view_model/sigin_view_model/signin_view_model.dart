@@ -8,9 +8,9 @@ import 'package:gharko_doctor/features/authentication/presentation/view_model/si
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
 
 class LoginViewModel extends Bloc<SigninEvent, SigninState> {
-  final UserLoginUsecase _UserLoginUsecase;
+  final UserLoginUsecase _userLoginUsecase;
 
-  LoginViewModel(this._UserLoginUsecase) : super(SigninState.initial()) {
+  LoginViewModel(this._userLoginUsecase) : super(SigninState.initial()) {
     on<NavigateToRegisterViewEvent>(_onNavigateToRegisterView);
     on<NavigateToHomeViewEvent>(_onNavigateToHomeView);
     on<LoginWithEmailAndPasswordEvent>(_onLoginWithEmailAndPassword);
@@ -23,10 +23,7 @@ class LoginViewModel extends Bloc<SigninEvent, SigninState> {
     if (event.context.mounted) {
       Navigator.push(
         event.context,
-
-        MaterialPageRoute(
-          builder: (context) =>  SignupPage(),
-        ),
+        MaterialPageRoute(builder: (context) => SignupPage()),
       );
     }
   }
@@ -38,27 +35,27 @@ class LoginViewModel extends Bloc<SigninEvent, SigninState> {
     if (event.context.mounted) {
       Navigator.pushReplacement(
         event.context,
-        MaterialPageRoute(
-          builder: (context) => Dashboard(),
-        ),
+        MaterialPageRoute(builder: (context) => Dashboard()),
       );
     }
   }
 
-  void _onLoginWithEmailAndPassword(
+  Future<void> _onLoginWithEmailAndPassword(
     LoginWithEmailAndPasswordEvent event,
     Emitter<SigninState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _UserLoginUsecase(
-      LoginUsecaseParams(username: event.username, password: event.password),
+
+    final result = await _userLoginUsecase(
+      LoginUsecaseParams(
+        username: event.username,
+        password: event.password,
+      ),
     );
 
     result.fold(
       (failure) {
-        // Handle failure case
         emit(state.copyWith(isLoading: false, isSuccess: false));
-
         showMySnackBar(
           context: event.context,
           message: 'Invalid credentials. Please try again.',
@@ -66,7 +63,6 @@ class LoginViewModel extends Bloc<SigninEvent, SigninState> {
         );
       },
       (token) {
-        // Handle success case
         emit(state.copyWith(isLoading: false, isSuccess: true));
         add(NavigateToHomeViewEvent(context: event.context));
       },

@@ -10,7 +10,8 @@ class RegisterUserEvent extends SignupEvent {
   final String password;
   final String confirmPassword;
   final String phone;
-    final BuildContext context;
+    @override
+  final BuildContext context;
 
   RegisterUserEvent({
     required this.username,

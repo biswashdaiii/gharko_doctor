@@ -12,6 +12,7 @@ class HiveServices {
 
   //Register Adapters
   Hive.registerAdapter(UserHiveModelAdapter());
+  
   }
 
   //Authentication queries
@@ -38,16 +39,20 @@ class HiveServices {
 
   // Login using username and password
   Future<UserHiveModel?> login(String username, String password) async {
-    var box = await Hive.openBox<UserHiveModel>(
-      HiveTableConstant.userBox,
-    );
-    var student = box.values.firstWhere(
-      (element) => element.username == username && element.password == password,
-      orElse: () => throw Exception('Invalid username or password'),
-    );
-    box.close();
-    return student;
-  }
+  var box = await Hive.openBox<UserHiveModel>(
+    HiveTableConstant.userBox,
+  );
 
+  try {
+    var user = box.values.firstWhere(
+      (element) => element.username == username && element.password == password,
+    );
+    return user;
+  } catch (e) {
+    return null;
+  } finally {
+    await box.close();
+  }
+}
 
 }

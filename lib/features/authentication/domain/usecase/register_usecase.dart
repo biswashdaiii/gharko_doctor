@@ -1,10 +1,10 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gharko_doctor/app/usecase/usecase.dart';
 import 'package:gharko_doctor/core/error/failure.dart';
 import 'package:gharko_doctor/features/authentication/domain/entities/user_entity.dart';
 import 'package:gharko_doctor/features/authentication/domain/repository/user_repository.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterUserParams extends Equatable {
   final String username;
@@ -14,22 +14,11 @@ class RegisterUserParams extends Equatable {
   const RegisterUserParams({
     required this.username,
     required this.phone,
-    required this.password
-  });
-
-  //intial constructor
-  const RegisterUserParams.initial({
-    required this.username,
-    required this.phone,
     required this.password,
   });
 
   @override
-  List<Object?> get props => [
-    username,
-    phone,
-    password,
-  ];
+  List<Object?> get props => [username, phone, password];
 }
 
 class UserRegisterUseCase
@@ -37,7 +26,7 @@ class UserRegisterUseCase
   final IUserRepository _userRepository;
 
   UserRegisterUseCase({required IUserRepository userRepository})
-    : _userRepository = userRepository;
+      : _userRepository = userRepository;
 
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
@@ -45,7 +34,7 @@ class UserRegisterUseCase
       username: params.username,
       phone: params.phone,
       password: params.password,
-      userId: '',
+      userId: const  Uuid().v4(), // You can generate a UUID here if needed
     );
     return _userRepository.registerUser(userEntity);
   }

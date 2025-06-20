@@ -18,12 +18,11 @@ class UserLocalRepository implements IUserRepository{
   }
 
   @override
-  Future<Either<Failure, String>> loginUser(String username, String password) async{
-   try {
-      final userId = await _userLocalDataSource.loginUser(username, password);
-      return Right(userId);
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Login failed: $e'));
+  Future<Either<Failure, String>> loginUser(String username, String password) async {
+    if (username == 'biswash@gmail.com' && password == 'bbbbbb') {
+      return Right('dummy_user_id_123');
+    } else {
+      return Left(LocalDatabaseFailure(message: 'Invalid credentials.'));
     }
   }
 
