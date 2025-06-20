@@ -22,19 +22,19 @@ class HiveServices {
     await box.put(auth.userId, auth);
   }
 
-  Future<void> deleteAuth(String id) async {
-    var box = await Hive.openBox<UserHiveModel>(
-      HiveTableConstant.userBox,
-    );
-    await box.delete(id);
-  }
+  // Future<void> deleteAuth(String id) async {
+  //   var box = await Hive.openBox<UserHiveModel>(
+  //     HiveTableConstant.userBox,
+  //   );
+  //   await box.delete(id);
+  // }
 
-  Future<List<UserHiveModel>> getAllAuth() async {
-    var box = await Hive.openBox<UserHiveModel>(
-      HiveTableConstant.userBox,
-    );
-    return box.values.toList();
-  }
+  // Future<List<UserHiveModel>> getAllAuth() async {
+  //   var box = await Hive.openBox<UserHiveModel>(
+  //     HiveTableConstant.userBox,
+  //   );
+  //   return box.values.toList();
+  // }
 
   // Login using username and password
   Future<UserHiveModel?> login(String username, String password) async {

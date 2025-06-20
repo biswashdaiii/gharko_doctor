@@ -33,7 +33,7 @@ class UserHiveModel extends Equatable{
 
   //initial constructor
   const UserHiveModel.initial():
-    userId=null,
+    userId='',
     phone='',
     username='',
     password='';
@@ -57,8 +57,6 @@ class UserHiveModel extends Equatable{
      password: password);
 
   
-
-
 
   @override
   List<Object?> get props => [

@@ -1,7 +1,9 @@
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
+import 'package:gharko_doctor/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashScreenView extends StatelessWidget {
@@ -9,6 +11,10 @@ class SplashScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SplashViewModel>().init(context);
+    });
+
     return AnimatedSplashScreen(
       splash: Column(
         mainAxisSize: MainAxisSize.min,
