@@ -5,8 +5,8 @@ import 'package:gharko_doctor/features/authentication/domain/usecase/login_useca
 import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
-import 'package:gharko_doctor/features/doctor/presentation/view/dashboard.dart';
-import 'package:gharko_doctor/features/doctor/presentation/view/doctor_dashboard.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view/doctor_page.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view/main_dashboard.dart';
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
 
 class LoginViewModel extends Bloc<SigninEvent, SigninState> {
@@ -37,7 +37,7 @@ class LoginViewModel extends Bloc<SigninEvent, SigninState> {
     if (event.context.mounted) {
       Navigator.pushReplacement(
         event.context,
-        MaterialPageRoute(builder: (context) => Dashboard()),
+        MaterialPageRoute(builder: (context) => MainDashboard()),
       );
     }
   }

@@ -9,7 +9,7 @@ import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usec
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  const Dashboard({super.key, required String selectedSpeciality});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -55,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
     return BlocProvider.value(
       value: doctorBloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Dashboard')),
+        appBar: AppBar(title: const Text('Find Your Related Doctor')),
         body: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
