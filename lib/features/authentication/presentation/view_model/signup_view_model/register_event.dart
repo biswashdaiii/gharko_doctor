@@ -6,7 +6,7 @@ sealed class RegisterEvent {
   get context => null;
 }
 class RegisterUserEvent extends RegisterEvent {
-    final BuildContext context;
+  final BuildContext context;
   final String fullName;
   final String password;
   final String email;

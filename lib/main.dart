@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/screens/splash_screen.dart';
-
-void main() {
+import 'package:gharko_doctor/app/myapp.dart';
+import 'package:gharko_doctor/app/service_locator/service_locator.dart';
+import 'package:gharko_doctor/core/network/hive_services.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initDependencies();
+  await serviceLocator<HiveServices>().init();
   runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Gharko Doctor',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: const SplashScreenView(), 
-    );
   }
-}

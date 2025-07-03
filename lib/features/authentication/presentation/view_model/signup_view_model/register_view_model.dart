@@ -22,7 +22,7 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
   ) async {
     emit(state.copyWith(isLoading: true));
     final result = await _registerUseCase(
-      RegisterUsecaseParams(
+      RegisterUserParams(
         fullName: event.fullName,
         email: event.email,
         password: event.password,
@@ -32,12 +32,17 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
     result.fold(
       (failure) {
         emit(state.copyWith(isLoading: false, isSuccess: false));
-        showMySnackBar(context: event.context, message: "Registration Failed: ${failure.message}");
+        showMySnackBar(
+          context: event.context,
+          message: "Registration Failed: ${failure.message}",
+        );
       },
       (success) {
         emit(state.copyWith(isLoading: false, isSuccess: true));
-        showMySnackBar(context: event.context, message: "Registration Successful");
-       
+        showMySnackBar(
+          context: event.context,
+          message: "Registration Successful",
+        );
       },
     );
   }

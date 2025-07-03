@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gharko_doctor/core/common/snackbar/snackbar.dart';
 import 'package:gharko_doctor/features/authentication/domain/usecase/login_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_event.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_state.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
 
 class LoginViewModel extends Bloc<SigninEvent, SigninState> {
@@ -41,30 +41,34 @@ class LoginViewModel extends Bloc<SigninEvent, SigninState> {
   }
 
   Future<void> _onLoginWithEmailAndPassword(
-    LoginWithEmailAndPasswordEvent event,
-    Emitter<SigninState> emit,
-  ) async {
-    emit(state.copyWith(isLoading: true));
+  LoginWithEmailAndPasswordEvent event,
+  Emitter<SigninState> emit,
+) async {
+  emit(state.copyWith(isLoading: true));
 
-    final result = await _userLoginUsecase(
-      LoginUsecaseParams(
-        email: event.email,
-        password: event.password,
-      ),
-    );
+  final result = await _userLoginUsecase(
+    LoginUsecaseParams(
+      email: event.email,
+      password: event.password,
+    ),
+  );
 
-    result.fold(
-      (failure) {
-        emit(state.copyWith(isLoading: false, isSuccess: false));
-        showMySnackBar(
-          context: event.context,
-          message: 'Invalid credentials. Please try again.',
-          color: Colors.red,
-        );
-      },
-      (token) {
-          emit(state.copyWith(isLoading: false, isSuccess: true));
-      },
-    );
-  }
+  result.fold(
+    (failure) {
+      emit(state.copyWith(isLoading: false, isSuccess: false));
+      showMySnackBar(
+        context: event.context,
+        message: 'Invalid credentials. Please try again.',
+        color: Colors.red,
+      );
+    },
+    (token) {
+      emit(state.copyWith(isLoading: false, isSuccess: true));
+
+      // ✅ THIS IS WHAT YOU MISSED
+      add(NavigateToHomeViewEvent(context: event.context));
+    },
+  );
+}
+
 }
