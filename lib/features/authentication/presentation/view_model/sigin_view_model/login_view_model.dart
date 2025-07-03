@@ -5,6 +5,8 @@ import 'package:gharko_doctor/features/authentication/domain/usecase/login_useca
 import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view/dashboard.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view/doctor_dashboard.dart';
 import 'package:gharko_doctor/screens/dashboard_screen.dart';
 
 class LoginViewModel extends Bloc<SigninEvent, SigninState> {

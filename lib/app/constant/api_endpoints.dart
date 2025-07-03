@@ -7,13 +7,16 @@ class ApiEndpoints {
 
   // For Android Emulator
   static const String serverAddress = "http://10.0.2.2:5050";
+
   // For iPhone (uncomment if needed)
   static const String baseUrl = "$serverAddress/api/";
-  // static const String imageUrl = "$baseUrl/uploads/";
 
   // Auth
   static const String login = "auth/login";
   static const String register = "auth/register";
 
-  
+  // Doctor Endpoints
+  static const String getAllDoctors = "doctor/list"; // GET: api/doctor
+  static const String getDoctorsBySpeciality = "doctor"; // GET: api/doctor?speciality={speciality}
+  // static const String getDoctorById = "doctor"; // GET: api/doctor/
 }
