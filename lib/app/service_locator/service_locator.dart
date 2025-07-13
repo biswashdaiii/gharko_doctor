@@ -1,7 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 
-import 'package:gharko_doctor/app/constant/api_endpoints.dart';
 import 'package:gharko_doctor/core/network/api_service.dart';
 import 'package:gharko_doctor/core/network/hive_services.dart';
 
@@ -14,7 +13,6 @@ import 'package:gharko_doctor/features/authentication/domain/usecase/login_useca
 import 'package:gharko_doctor/features/authentication/domain/usecase/register_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
-import 'package:gharko_doctor/features/doctor/data/data_source/doctor_datasource.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
 import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';

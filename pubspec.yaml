@@ -58,6 +58,9 @@ dependencies:
   icons_plus: ^5.0.0
   lottie: ^3.3.1
   font_awesome_flutter: ^10.6.0
+  mocktail: ^1.0.4
+  bloc_test: ^10.0.0
+  test_cov_console: ^0.2.2
 
 dev_dependencies:
   flutter_test:

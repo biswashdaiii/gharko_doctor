@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 @immutable
@@ -6,6 +5,7 @@ sealed class RegisterEvent {
   get context => null;
 }
 class RegisterUserEvent extends RegisterEvent {
+  @override
   final BuildContext context;
   final String fullName;
   final String password;

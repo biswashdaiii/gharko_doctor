@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gharko_doctor/core/common/snackbar/snackbar.dart';
-import 'package:gharko_doctor/features/authentication/data/model/user_hive_model.dart';
 import 'package:gharko_doctor/features/authentication/domain/usecase/register_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_event.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_state.dart';
-import 'package:hive/hive.dart';
 class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
   final UserRegisterUseCase _registerUseCase;
 

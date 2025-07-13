@@ -6,7 +6,7 @@ class ApiEndpoints {
   static const receiveTimeout = Duration(seconds: 1000);
 
   // For Android Emulator
-  static const String serverAddress = "http://10.0.2.2:5050";
+  static const String serverAddress = "http://192.168.1.77:5050";
 
   // For iPhone (uncomment if needed)
   static const String baseUrl = "$serverAddress/api/";

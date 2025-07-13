@@ -7,8 +7,8 @@ class Home extends StatelessWidget {
   Home({
     required this.onSpecialityTap,
     required this.recentDoctors,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<String> specialties = [
     'Gynecologist',
@@ -135,7 +135,7 @@ class Home extends StatelessWidget {
 // Doctor card UI (similar to your doctor dashboard cards)
 class _DoctorCard extends StatelessWidget {
   final DoctorEntity doctor;
-  const _DoctorCard({required this.doctor, Key? key}) : super(key: key);
+  const _DoctorCard({required this.doctor});
 
   @override
   Widget build(BuildContext context) {
