@@ -13,17 +13,17 @@ import 'package:gharko_doctor/features/authentication/domain/usecase/login_useca
 import 'package:gharko_doctor/features/authentication/domain/usecase/register_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
-import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
-import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
-import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
+import 'package:gharko_doctor/features/dashboard/domain/usecase/get_all_doctor_usecase.dart';
+import 'package:gharko_doctor/features/dashboard/domain/usecase/get_doctor_byspeciality_usecase.dart';
+import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_bloc.dart';
 
 // Splash
 import 'package:gharko_doctor/features/splash/presentation/view_model/splash_view_model.dart';
 
 // Doctor feature imports
-import 'package:gharko_doctor/features/doctor/data/data_source/doctor_remote_datasource.dart';
-import 'package:gharko_doctor/features/doctor/data/repository/doctor_remote_repository.dart';
-import 'package:gharko_doctor/features/doctor/domain/repository/doctor_repository.dart';
+import 'package:gharko_doctor/features/dashboard/data/data_source/doctor_remote_datasource.dart';
+import 'package:gharko_doctor/features/dashboard/data/repository/doctor_remote_repository.dart';
+import 'package:gharko_doctor/features/dashboard/domain/repository/doctor_repository.dart';
 
 final serviceLocator = GetIt.instance;
 

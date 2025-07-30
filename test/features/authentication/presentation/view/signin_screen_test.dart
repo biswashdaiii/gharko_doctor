@@ -15,7 +15,7 @@ void main() {
   late MockLoginViewModel mockLoginViewModel;
   late BuildContext dummyContext;
 
-  Future<void> _registerFallbackWithContext(WidgetTester tester) async {
+  Future<void> registerFallbackWithContext(WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
@@ -50,7 +50,7 @@ void main() {
 
   group('LoginScreen simple tests', () {
     testWidgets('shows AppBar with title "Login"', (tester) async {
-      await _registerFallbackWithContext(tester);
+      await registerFallbackWithContext(tester);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -73,7 +73,7 @@ void main() {
     testWidgets(
       'dispatches LoginWithEmailAndPasswordEvent when Login is tapped',
       (tester) async {
-        await _registerFallbackWithContext(tester);
+        await registerFallbackWithContext(tester);
 
         await tester.pumpWidget(
           MaterialApp(

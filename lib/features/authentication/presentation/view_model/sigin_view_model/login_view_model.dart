@@ -5,7 +5,7 @@
   import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
   import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
   import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
-  import 'package:gharko_doctor/features/doctor/presentation/view/main_dashboard.dart';
+  import 'package:gharko_doctor/features/dashboard/presentation/view/main_dashboard.dart';
 
   class LoginViewModel extends Bloc<SigninEvent, SigninState> {
     final UserLoginUsecase _userLoginUsecase;

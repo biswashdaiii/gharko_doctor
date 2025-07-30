@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gharko_doctor/core/error/failure.dart';
 import 'package:gharko_doctor/features/authentication/domain/usecase/login_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
