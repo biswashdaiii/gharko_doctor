@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/doctor_page.dart';
+import 'package:gharko_doctor/features/myappointments/presentation/view/myappointment_page.dart';
 import 'package:gharko_doctor/features/profile/presentation/view/profile.dart';
 import 'package:gharko_doctor/screens/view/search.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/home.dart';
@@ -38,7 +39,7 @@ class _MainDashboardState extends State<MainDashboard> {
       Dashboard(
         selectedSpeciality: selectedSpeciality ?? 'All',
       ),
-
+      const MyAppointmentsPage(),
       const ProfilePage(userId: '',),
     ];
 

@@ -4,7 +4,6 @@ import 'package:gharko_doctor/features/myappointments/data/model/myappointment_m
 import 'package:http/http.dart' as http;
 import 'package:gharko_doctor/core/error/exception.dart';
 
-
 class MyAppointmentRemoteDataSourceImpl implements MyAppointmentRemoteDataSource {
   final http.Client client;
 
@@ -14,6 +13,7 @@ class MyAppointmentRemoteDataSourceImpl implements MyAppointmentRemoteDataSource
 
   @override
   Future<List<MyAppointmentModel>> getMyAppointments(String token) async {
+    print('Fetching appointments with token: $token');
     final response = await client.get(
       Uri.parse('$baseUrl/my-appointments'),
       headers: {
@@ -21,10 +21,21 @@ class MyAppointmentRemoteDataSourceImpl implements MyAppointmentRemoteDataSource
         'Authorization': 'Bearer $token',
       },
     );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      final List<dynamic> jsonList = jsonDecode(response.body);
-      return jsonList.map((json) => MyAppointmentModel.fromJson(json)).toList();
+      final Map<String, dynamic> jsonMap = jsonDecode(response.body);
+
+      if (jsonMap['success'] == true && jsonMap['appointments'] != null) {
+        final List<dynamic> jsonList = jsonMap['appointments'];
+        return jsonList.map((json) => MyAppointmentModel.fromJson(json)).toList();
+      } else {
+        throw ServerException(
+          message: 'Invalid response structure',
+          statusCode: response.statusCode,
+        );
+      }
     } else {
       throw ServerException(
         message: 'Failed to load appointments',
@@ -51,6 +62,4 @@ class MyAppointmentRemoteDataSourceImpl implements MyAppointmentRemoteDataSource
       );
     }
   }
-  
-  
 }
