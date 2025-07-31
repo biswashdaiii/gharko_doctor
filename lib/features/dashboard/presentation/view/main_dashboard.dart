@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/doctor_page.dart';
-import 'package:gharko_doctor/screens/view/appointment.dart';
-import 'package:gharko_doctor/screens/view/profile.dart';
+import 'package:gharko_doctor/features/profile/presentation/view/profile.dart';
 import 'package:gharko_doctor/screens/view/search.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/home.dart';
 
@@ -39,8 +38,8 @@ class _MainDashboardState extends State<MainDashboard> {
       Dashboard(
         selectedSpeciality: selectedSpeciality ?? 'All',
       ),
-      const Appointment(),
-      const Profile(),
+
+      const ProfilePage(userId: '',),
     ];
 
     return Scaffold(
@@ -61,7 +60,7 @@ class _MainDashboardState extends State<MainDashboard> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.search), label: 'chat'),
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.chartBar), label: 'chat'),
           BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.stethoscope), label: 'Doctors'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Appointments'),
           BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.user), label: 'Profile'),

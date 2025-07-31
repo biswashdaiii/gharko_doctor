@@ -46,35 +46,33 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
   }
 
   // Helper conversions
-  AppointmentEntity _mapModelToEntity(AppointmentModel model) {
-    return AppointmentEntity(
-      userId: model.userId,
-      docId: model.docId,
-      slotDate: model.slotDate,
-      slotTime: model.slotTime,
-      docData: model.docData,
-      userData: model.userData,
-      amount: model.amount,
-      date: model.date,
-      cancelled: model.cancelled,
-      payment: model.payment,
-      isCompleted: model.isCompleted,
-    );
-  }
+ AppointmentEntity _mapModelToEntity(AppointmentModel model) {
+  return AppointmentEntity(
+    userId: model.userId,          // added userId
+    docId: model.docId,
+    slotDate: model.slotDate,
+    slotTime: model.slotTime,
+    docData: model.docData,
+    amount: model.amount,
+    date: model.date,
+    cancelled: model.cancelled,
+    payment: model.payment,
+    isCompleted: model.isCompleted,
+  );
+}
 
   AppointmentModel _mapEntityToModel(AppointmentEntity entity) {
-    return AppointmentModel(
-      userId: entity.userId,
-      docId: entity.docId,
-      slotDate: entity.slotDate,
-      slotTime: entity.slotTime,
-      docData: entity.docData,
-      userData: entity.userData,
-      amount: entity.amount,
-      date: entity.date,
-      cancelled: entity.cancelled,
-      payment: entity.payment,
-      isCompleted: entity.isCompleted,
-    );
-  }
+  return AppointmentModel(
+    userId: entity.userId ?? '',   // added userId, fallback to empty string if null
+    docId: entity.docId,
+    slotDate: entity.slotDate,
+    slotTime: entity.slotTime,
+    docData: entity.docData,
+    amount: entity.amount,
+    date: entity.date,
+    cancelled: entity.cancelled,
+    payment: entity.payment,
+    isCompleted: entity.isCompleted,
+  );
+}
 }

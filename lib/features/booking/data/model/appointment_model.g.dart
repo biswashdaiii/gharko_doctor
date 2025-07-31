@@ -22,19 +22,18 @@ class AppointmentModelAdapter extends TypeAdapter<AppointmentModel> {
       slotDate: fields[2] as String,
       slotTime: fields[3] as String,
       docData: (fields[4] as Map).cast<String, dynamic>(),
-      userData: (fields[5] as Map).cast<String, dynamic>(),
-      amount: fields[6] as double,
-      date: fields[7] as DateTime,
-      cancelled: fields[8] as bool,
-      payment: fields[9] as double?,
-      isCompleted: fields[10] as bool,
+      amount: fields[5] as double,
+      date: fields[6] as DateTime,
+      cancelled: fields[7] as bool,
+      payment: fields[8] as double?,
+      isCompleted: fields[9] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, AppointmentModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -46,16 +45,14 @@ class AppointmentModelAdapter extends TypeAdapter<AppointmentModel> {
       ..writeByte(4)
       ..write(obj.docData)
       ..writeByte(5)
-      ..write(obj.userData)
-      ..writeByte(6)
       ..write(obj.amount)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.date)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.cancelled)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.payment)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.isCompleted);
   }
 

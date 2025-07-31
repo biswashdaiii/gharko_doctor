@@ -13,17 +13,66 @@ class ApiService {
       ..options.baseUrl = ApiEndpoints.baseUrl
       ..options.connectTimeout = ApiEndpoints.connectionTimeout
       ..options.receiveTimeout = ApiEndpoints.receiveTimeout
-      ..interceptors.add(DioErrorInterceptor())
-      ..interceptors.add(
+      ..options.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+      ..interceptors.addAll([
+        DioErrorInterceptor(),
         PrettyDioLogger(
           requestHeader: true,
           requestBody: true,
           responseHeader: true,
+          responseBody: true,
         ),
-      )
-      ..options.headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      };
+      ]);
+  }
+
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return _dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
+  }
+
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? headers,
+  }) {
+    return _dio.post(
+      path,
+      data: data,
+      options: Options(headers: headers),
+    );
+  }
+
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? headers,
+  }) {
+    return _dio.put(
+      path,
+      data: data,
+      options: Options(headers: headers),
+    );
+  }
+
+  Future<Response> delete(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? headers,
+  }) {
+    return _dio.delete(
+      path,
+      data: data,
+      options: Options(headers: headers),
+    );
   }
 }

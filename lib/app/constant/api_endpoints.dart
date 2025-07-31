@@ -6,8 +6,10 @@ class ApiEndpoints {
   static const receiveTimeout = Duration(seconds: 1000);
 
   // Server Base
-  static const String serverAddress = "http://192.168.1.77:5050";
+  // static const String serverAddress = "http://192.168.1.77:5050";
   static const String baseUrl = "$serverAddress/api/";
+    // For Android Emulator
+  static const String serverAddress = "http://192.168.1.77:5050";
 
   // Auth
   static const String login = "auth/login";
@@ -24,4 +26,6 @@ class ApiEndpoints {
   static String cancelAppointment(String id) => "appointments/$id/cancel";
   static String completeAppointment(String id) => "appointments/$id/complete";
   static String updateAppointment(String id) => "appointments/$id";
+  //profile
+  
 }

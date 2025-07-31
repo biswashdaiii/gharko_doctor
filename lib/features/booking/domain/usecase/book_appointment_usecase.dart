@@ -17,19 +17,23 @@ class BookAppointmentUseCase implements UsecaseWithParams<void, AppointmentEntit
 
   @override
   Future<Either<Failure, void>> call(AppointmentEntity appointment) async {
+    // Fetch the stored token (authentication)
     final tokenResult = await _tokenSharedPrefs.getToken();
 
+    // Check if fetching token failed
     if (tokenResult.isLeft()) {
-      return Left(
-          tokenResult.swap().getOrElse(() => RemoteDatabaseFailure(message: "Token fetch failed")));
+      // Return failure from token fetching
+      return Left(tokenResult.swap().getOrElse(() => RemoteDatabaseFailure(message: "Token fetch failed")));
     }
 
-    final token = tokenResult.getOrElse(() => null);
+    // Extract token or null if not found
+    final String? token = tokenResult.getOrElse(() => null);
+
     if (token == null) {
       return Left(RemoteDatabaseFailure(message: "User not logged in"));
     }
 
+    // Forward the booking call to repository with valid token
     return await _repository.bookAppointment(appointment, token);
   }
 }
-

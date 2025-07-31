@@ -30,14 +30,17 @@ class BookAppointment extends AppointmentEvent {
   final DateTime selectedDate;
   final String selectedTime;
   final double fee;
+  final Map<String, dynamic> docData;
 
   const BookAppointment({
     required this.doctorId,
     required this.selectedDate,
     required this.selectedTime,
     required this.fee,
+    required this.docData,
   });
 
   @override
-  List<Object?> get props => [doctorId, selectedDate, selectedTime, fee];
+  List<Object?> get props =>
+      [doctorId, selectedDate, selectedTime, fee, docData];
 }

@@ -121,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
 
                       // Show max 3 doctors only (recent 3)
                       final recentDoctors =
-                          filteredDoctors.length > 3
+                          filteredDoctors.length > 10
                               ? filteredDoctors.sublist(0, 3)
                               : filteredDoctors;
 
@@ -138,36 +138,60 @@ class _DashboardState extends State<Dashboard> {
                           final doctor = recentDoctors[index];
                           return ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Colors.teal,
-                              child: Text(
-                                doctor.name.isNotEmpty ? doctor.name[0] : '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              radius: 25,
+                              backgroundColor: Colors.grey.shade200,
+                              backgroundImage:
+                                  doctor.imageUrl.isNotEmpty
+                                      ? NetworkImage(
+                                        'http://192.168.1.77:5050/${doctor.imageUrl}',
+                                      )
+                                      : null,
+                              child:
+                                  doctor.imageUrl.isEmpty
+                                      ? Text(
+                                        doctor.name.isNotEmpty
+                                            ? doctor.name[0]
+                                            : '',
+                                        style: const TextStyle(
+                                          color: Colors.teal,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                      : null,
                             ),
+
                             title: Text(doctor.name),
                             subtitle: Text(
                               '${doctor.speciality} - ${doctor.degree}',
                             ),
                             trailing: Text('\$${doctor.fee}'),
                             onTap: () {
+                              final docData = {
+                                'id': doctor.id,
+                                'name': doctor.name,
+                                'speciality': doctor.speciality,
+                                'degree': doctor.degree,
+                                'about': doctor.about ?? "No details available",
+                                'fee': doctor.fee,
+                                'imageUrl': doctor.imageUrl,
+                              };
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
                                       (_) => AppointmentPage(
-                                        doctorId:
-                                            doctor
-                                                .id, // Use actual id from DoctorEntity
+                                        doctorId: doctor.id,
                                         doctorName: doctor.name,
                                         specialty: doctor.speciality,
-                                       // or default 0 if null
                                         about:
                                             doctor.about ??
-                                            "No details available", // if you have 'about'
-                                        fee: doctor.fee.toDouble(), experienceYears: 0,
+                                            "No details available",
+                                        fee: doctor.fee.toDouble(),
+                                        experienceYears: 0,
+                                        doctorImageUrl:
+                                            'http://192.168.1.77:5050/${doctor.imageUrl}',
+                                        // ✅ Required argument
                                       ),
                                 ),
                               );

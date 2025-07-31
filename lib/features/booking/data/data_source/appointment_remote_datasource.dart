@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:gharko_doctor/app/constant/api_endpoints.dart';
+import 'package:gharko_doctor/core/network/api_service.dart';
 import 'package:gharko_doctor/features/booking/data/data_source/appointment_datasource.dart';
 import 'package:http/http.dart' as http;
 import 'package:gharko_doctor/features/booking/data/model/appointment_model.dart';
@@ -7,16 +8,21 @@ import 'package:gharko_doctor/features/booking/data/model/appointment_model.dart
 class AppointmentRemoteDataSourceImpl implements IAppointmentRemoteDataSource {
   final http.Client client;
 
-  AppointmentRemoteDataSourceImpl({required this.client});
+  AppointmentRemoteDataSourceImpl({required this.client, required ApiService apiService});
 
   @override
-  Future<List<AppointmentModel>> fetchAppointments(String token, {String? userId, String? docId}) async {
+  Future<List<AppointmentModel>> fetchAppointments(
+    String token, {
+    String? userId,
+    String? docId,
+  }) async {
     final queryParams = <String, String>{};
     if (userId != null) queryParams['userId'] = userId;
     if (docId != null) queryParams['docId'] = docId;
 
-    final uri = Uri.parse(ApiEndpoints.baseUrl + ApiEndpoints.getAppointments)
-        .replace(queryParameters: queryParams);
+    final uri = Uri.parse(
+      ApiEndpoints.baseUrl + ApiEndpoints.getAppointments,
+    ).replace(queryParameters: queryParams);
 
     final response = await client.get(
       uri,
@@ -35,7 +41,10 @@ class AppointmentRemoteDataSourceImpl implements IAppointmentRemoteDataSource {
   }
 
   @override
-  Future<void> bookAppointment(AppointmentModel appointment, String token) async {
+  Future<void> bookAppointment(
+    AppointmentModel appointment,
+    String token,
+  ) async {
     final uri = Uri.parse(ApiEndpoints.baseUrl + ApiEndpoints.bookAppointment);
 
     final response = await client.post(
@@ -46,6 +55,10 @@ class AppointmentRemoteDataSourceImpl implements IAppointmentRemoteDataSource {
       },
       body: json.encode(appointment.toJson()),
     );
+    // 🔍 Add these logs to debug
+    print('📤 Sent body: ${json.encode(appointment.toJson())}');
+    print('📥 Response status: ${response.statusCode}');
+    print('📥 Response body: ${response.body}');
 
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to book appointment');
@@ -54,7 +67,9 @@ class AppointmentRemoteDataSourceImpl implements IAppointmentRemoteDataSource {
 
   @override
   Future<void> cancelAppointment(String appointmentId, String token) async {
-    final uri = Uri.parse(ApiEndpoints.baseUrl + ApiEndpoints.cancelAppointment(appointmentId));
+    final uri = Uri.parse(
+      ApiEndpoints.baseUrl + ApiEndpoints.cancelAppointment(appointmentId),
+    );
 
     final response = await client.patch(
       uri,

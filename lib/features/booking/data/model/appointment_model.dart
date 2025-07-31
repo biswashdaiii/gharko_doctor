@@ -20,21 +20,18 @@ class AppointmentModel {
   final Map<String, dynamic> docData;
 
   @HiveField(5)
-  final Map<String, dynamic> userData;
-
-  @HiveField(6)
   final double amount;
 
-  @HiveField(7)
+  @HiveField(6)
   final DateTime date;
 
-  @HiveField(8)
+  @HiveField(7)
   final bool cancelled;
 
-  @HiveField(9)
+  @HiveField(8)
   final double? payment;
 
-  @HiveField(10)
+  @HiveField(9)
   final bool isCompleted;
 
   AppointmentModel({
@@ -43,7 +40,6 @@ class AppointmentModel {
     required this.slotDate,
     required this.slotTime,
     required this.docData,
-    required this.userData,
     required this.amount,
     required this.date,
     required this.cancelled,
@@ -58,7 +54,6 @@ class AppointmentModel {
       slotDate: json['slotDate'],
       slotTime: json['slotTime'],
       docData: Map<String, dynamic>.from(json['docData']),
-      userData: Map<String, dynamic>.from(json['userData']),
       amount: (json['amount'] as num).toDouble(),
       date: DateTime.parse(json['date']),
       cancelled: json['cancelled'] ?? false,
@@ -74,7 +69,6 @@ class AppointmentModel {
       'slotDate': slotDate,
       'slotTime': slotTime,
       'docData': docData,
-      'userData': userData,
       'amount': amount,
       'date': date.toIso8601String(),
       'cancelled': cancelled,
