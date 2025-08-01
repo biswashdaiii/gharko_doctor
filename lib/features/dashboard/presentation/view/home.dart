@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
 
 class Home extends StatelessWidget {
   final Function(String) onSpecialityTap;
-  final List<DoctorEntity> recentDoctors;
 
   Home({
     required this.onSpecialityTap,
-    required this.recentDoctors,
     super.key,
   });
 
@@ -25,167 +22,210 @@ class Home extends StatelessWidget {
     'General Physician': Icons.medical_services,
   };
 
+  final List<_FeatureItem> features = [
+    _FeatureItem(
+      icon: Icons.thumb_up_alt_outlined,
+      title: 'Trusted Doctors',
+      description: 'Experienced and verified professionals.',
+    ),
+    _FeatureItem(
+      icon: Icons.schedule,
+      title: 'Easy Booking',
+      description: 'Book appointments in just a few taps.',
+    ),
+    _FeatureItem(
+      icon: Icons.health_and_safety_outlined,
+      title: 'Quality Care',
+      description: 'Focused on your health and safety.',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top welcome box
-            Container(
-              height: 300,
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.teal.shade100,
-                borderRadius: BorderRadius.circular(12),
+        child: SingleChildScrollView(  // <-- Added to enable scrolling
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top container with background image + overlay text
+              Container(
+                height: 380,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      "http://192.168.1.77:5050/uploads/1753903624860-docc.png",
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.2),
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  alignment: Alignment.bottomLeft,
+                  child: const Text(
+                    "Welcome back!\nLet's find your top doctor",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black54,
+                          blurRadius: 6,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              child: const Text(
-                'Welcome back!\nLet\'s find your top doctor',
+
+              const SizedBox(height: 24),
+
+              // Specialties horizontal list
+              const Text(
+                'Specialities',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                height: 50,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: specialties.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    final speciality = specialties[index];
+                    return GestureDetector(
+                      onTap: () => onSpecialityTap(speciality),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.teal.shade50,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.teal),
+                        ),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              specialtyIcons[speciality] ?? Icons.local_hospital,
+                              color: Colors.teal,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              speciality,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.teal,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // New Feature Section - Why Choose Us?
+              const Text(
+                'Why Choose Us?',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.teal,
                 ),
               ),
-            ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-            // Specialties horizontal list with icons
-            const Text(
-              'Specialities',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            SizedBox(
-              height: 50,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: specialties.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  final speciality = specialties[index];
-                  return GestureDetector(
-                    onTap: () => onSpecialityTap(speciality),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: features.map((feature) {
+                  return Expanded(
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.teal.shade50,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.teal),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 4),
+                          )
+                        ],
                       ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                      child: Column(
                         children: [
-                          Icon(
-                            specialtyIcons[speciality] ?? Icons.local_hospital,
-                            color: Colors.teal,
-                          ),
-                          const SizedBox(width: 8),
+                          Icon(feature.icon, size: 42, color: Colors.teal),
+                          const SizedBox(height: 12),
                           Text(
-                            speciality,
+                            feature.title,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.teal,
-                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            feature.description,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontSize: 14,
                             ),
                           ),
                         ],
                       ),
                     ),
                   );
-                },
+                }).toList(),
               ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Recent Doctors Section
-            const Text(
-              'Top Doctors',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Show up to 3 recent doctors
-            recentDoctors.isEmpty
-                ? const Center(child: Text('No doctors available'))
-                : SizedBox(
-                    height: 140,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: recentDoctors.length > 3
-                          ? 3
-                          : recentDoctors.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (context, index) {
-                        final doctor = recentDoctors[index];
-                        return _DoctorCard(doctor: doctor);
-                      },
-                    ),
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-// Doctor card UI (similar to your doctor dashboard cards)
-class _DoctorCard extends StatelessWidget {
-  final DoctorEntity doctor;
-  const _DoctorCard({required this.doctor});
+class _FeatureItem {
+  final IconData icon;
+  final String title;
+  final String description;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 180,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.teal.shade50,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.teal,
-            child: Text(
-              doctor.name.isNotEmpty ? doctor.name[0] : '',
-              style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            doctor.name,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            doctor.speciality,
-            style: TextStyle(color: Colors.grey.shade700),
-          ),
-        ],
-      ),
-    );
-  }
+  _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
 }

@@ -57,7 +57,7 @@ class _MainDashboardState extends State<MainDashboard> {
     final List<Widget> screens = [
       Home(
         onSpecialityTap: _onSpecialitySelected,
-        recentDoctors: recentDoctors,
+      
       ),
       const Search(),
       Dashboard(
