@@ -1,5 +1,5 @@
 
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
+import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
 
 abstract interface class IDoctorDataSource {
   Future<List<DoctorEntity>> getAllDoctors();

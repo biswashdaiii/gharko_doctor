@@ -28,12 +28,12 @@ import 'package:gharko_doctor/features/booking/domain/usecase/book_appointment_u
 import 'package:gharko_doctor/features/booking/presentation/view_model/appointment_bloc.dart';
 
 // Dashboard/Doctor imports
-import 'package:gharko_doctor/features/dashboard/data/data_source/doctor_remote_datasource.dart';
-import 'package:gharko_doctor/features/dashboard/data/repository/doctor_remote_repository.dart';
-import 'package:gharko_doctor/features/dashboard/domain/repository/doctor_repository.dart';
-import 'package:gharko_doctor/features/dashboard/domain/usecase/get_all_doctor_usecase.dart';
-import 'package:gharko_doctor/features/dashboard/domain/usecase/get_doctor_byspeciality_usecase.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_bloc.dart';
+import 'package:gharko_doctor/features/doctor/data/data_source/doctor_remote_datasource.dart';
+import 'package:gharko_doctor/features/doctor/data/repository/doctor_remote_repository.dart';
+import 'package:gharko_doctor/features/doctor/domain/repository/doctor_repository.dart';
+import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
+import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
 
 // Profile imports
 import 'package:gharko_doctor/features/profile/data/datasource/profile_remotedatasource.dart';

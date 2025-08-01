@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
+import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'doctor_api_model.g.dart';

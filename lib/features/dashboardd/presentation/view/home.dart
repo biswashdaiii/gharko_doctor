@@ -51,7 +51,7 @@ class Home extends StatelessWidget {
             children: [
               // Top container with background image + overlay text
               Container(
-                height: 380,
+                height: 300,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gharko_doctor/features/booking/presentation/view/appointment_page.dart';
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_bloc.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_event.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_state.dart';
+import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_event.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_state.dart';
 import 'package:gharko_doctor/app/service_locator/service_locator.dart';
-import 'package:gharko_doctor/features/dashboard/domain/usecase/get_all_doctor_usecase.dart';
-import 'package:gharko_doctor/features/dashboard/domain/usecase/get_doctor_byspeciality_usecase.dart';
+import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
+import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key, required String selectedSpeciality});

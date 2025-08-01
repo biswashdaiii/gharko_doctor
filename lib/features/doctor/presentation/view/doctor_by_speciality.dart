@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_bloc.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_event.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view_model/doctor_state.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_event.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_state.dart';
 
 
 class DoctorsBySpecialityPage extends StatefulWidget {

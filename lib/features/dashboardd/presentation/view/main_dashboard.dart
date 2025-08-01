@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gharko_doctor/core/network/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view/doctor_page.dart';
+import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
+import 'package:gharko_doctor/features/doctor/presentation/view/doctor_page.dart';
 import 'package:gharko_doctor/features/myappointments/presentation/view/myappointment_page.dart';
 import 'package:gharko_doctor/features/profile/presentation/view/profile.dart';
 import 'package:gharko_doctor/screens/view/search.dart';
-import 'package:gharko_doctor/features/dashboard/presentation/view/home.dart';
+import 'package:gharko_doctor/features/dashboardd/presentation/view/home.dart';
 import 'package:gharko_doctor/app/sharedPref/token_shared_pref.dart';
 
 

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:gharko_doctor/app/constant/api_endpoints.dart';
 import 'package:gharko_doctor/core/network/api_service.dart';
-import 'package:gharko_doctor/features/dashboard/data/data_source/doctor_datasource.dart';
-import 'package:gharko_doctor/features/dashboard/data/model/doctor_api_model.dart';
-import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
+import 'package:gharko_doctor/features/doctor/data/data_source/doctor_datasource.dart';
+import 'package:gharko_doctor/features/doctor/data/model/doctor_api_model.dart';
+import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
 
 class DoctorRemoteDataSource implements IDoctorDataSource {
   final ApiService _apiService;

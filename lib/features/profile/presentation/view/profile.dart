@@ -133,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
             title: const Text("Profile"),
             centerTitle: true,
-            backgroundColor: theme.primaryColor,
+            backgroundColor: theme.primaryColorDark,
             elevation: 2,
             actions: [
               IconButton(
@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: theme.primaryColor,
+                            color: theme.primaryColorDark,
                             border: Border.all(color: Colors.white, width: 2),
                           ),
                           padding: const EdgeInsets.all(6),
