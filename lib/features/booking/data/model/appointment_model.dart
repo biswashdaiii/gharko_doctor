@@ -1,38 +1,16 @@
-import 'package:hive/hive.dart';
-
-part 'appointment_model.g.dart';
-
-@HiveType(typeId: 2)
 class AppointmentModel {
-  @HiveField(0)
   final String userId;
-
-  @HiveField(1)
   final String docId;
-
-  @HiveField(2)
   final String slotDate;
-
-  @HiveField(3)
   final String slotTime;
-
-  @HiveField(4)
   final Map<String, dynamic> docData;
-
-  @HiveField(5)
+  final Map<String, dynamic>? userData;
   final double amount;
-
-  @HiveField(6)
-  final DateTime date;
-
-  @HiveField(7)
+  final String date;
   final bool cancelled;
-
-  @HiveField(8)
   final double? payment;
-
-  @HiveField(9)
   final bool isCompleted;
+  final String? createdDate; // ✅ Added
 
   AppointmentModel({
     required this.userId,
@@ -40,25 +18,29 @@ class AppointmentModel {
     required this.slotDate,
     required this.slotTime,
     required this.docData,
+    this.userData, // ✅ make it nullable if optional
     required this.amount,
     required this.date,
     required this.cancelled,
-    this.payment,
+    this.payment, // ✅ make it nullable if optional
     required this.isCompleted,
+    this.createdDate, // ✅ added here
   });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
     return AppointmentModel(
-      userId: json['userId'],
-      docId: json['docId'],
-      slotDate: json['slotDate'],
-      slotTime: json['slotTime'],
-      docData: Map<String, dynamic>.from(json['docData']),
-      amount: (json['amount'] as num).toDouble(),
-      date: DateTime.parse(json['date']),
+      userId: json['userId'] ?? '',
+      docId: json['docId'] ?? '',
+      slotDate: json['slotDate'] ?? '',
+      slotTime: json['slotTime'] ?? '',
+      docData: json['docData'] ?? {},
+      userData: json['userData'], // ✅ safe for nullable
+      amount: (json['amount'] ?? 0).toDouble(),
+      date: json['date'] ?? '',
       cancelled: json['cancelled'] ?? false,
-      payment: json['payment'] != null ? (json['payment'] as num).toDouble() : null,
+      payment: (json['payment'] != null) ? (json['payment'] as num).toDouble() : null,
       isCompleted: json['isCompleted'] ?? false,
+      createdDate: json['createdDate'], // ✅ added
     );
   }
 
@@ -69,11 +51,13 @@ class AppointmentModel {
       'slotDate': slotDate,
       'slotTime': slotTime,
       'docData': docData,
+      'userData': userData,
       'amount': amount,
-      'date': date.toIso8601String(),
+      'date': date,
       'cancelled': cancelled,
       'payment': payment,
       'isCompleted': isCompleted,
+      'createdDate': createdDate,
     };
   }
 }

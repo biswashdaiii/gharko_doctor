@@ -83,6 +83,36 @@ class AppointmentCard extends StatelessWidget {
     required this.onCancel,
   });
 
+  void _showCancelConfirmationDialog(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancel Appointment'),
+        content: const Text('Are you sure you want to cancel this appointment?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes, Cancel'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      onCancel();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Appointment cancelled successfully'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final doctor = appointment.docData;
@@ -91,10 +121,9 @@ class AppointmentCard extends StatelessWidget {
     final doctorName = doctor['name'] ?? 'Unknown Doctor';
     final specialty = doctor['speciality'] ?? '';
     final imagePath = doctor['image'] ?? '';
-    final imageUrl =
-        imagePath.isNotEmpty
-            ? 'http://192.168.1.77:5050/${imagePath.replaceAll("\\", "/")}'
-            : '';
+    final imageUrl = imagePath.isNotEmpty
+        ? 'http://192.168.1.77:5050/${imagePath.replaceAll("\\", "/")}'
+        : '';
 
     return Card(
       elevation: 4,
@@ -111,17 +140,16 @@ class AppointmentCard extends StatelessWidget {
                   backgroundColor: Colors.teal.shade50,
                   backgroundImage:
                       imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-                  child:
-                      imageUrl.isEmpty
-                          ? Text(
-                            doctorName.isNotEmpty ? doctorName[0] : '',
-                            style: const TextStyle(
-                              color: Colors.teal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                            ),
-                          )
-                          : null,
+                  child: imageUrl.isEmpty
+                      ? Text(
+                          doctorName.isNotEmpty ? doctorName[0] : '',
+                          style: const TextStyle(
+                            color: Colors.teal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        )
+                      : null,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -183,21 +211,21 @@ class AppointmentCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 isCancelled
                     ? const Text(
-                      "Cancelled",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
+                        "Cancelled",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
                     : OutlinedButton.icon(
-                      onPressed: onCancel,
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        side: const BorderSide(color: Colors.red),
+                        onPressed: () => _showCancelConfirmationDialog(context),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          side: const BorderSide(color: Colors.red),
+                        ),
+                        icon: const Icon(Icons.cancel, size: 18),
+                        label: const Text("Cancel"),
                       ),
-                      icon: const Icon(Icons.cancel, size: 18),
-                      label: const Text("Cancel"),
-                    ),
               ],
             ),
           ],

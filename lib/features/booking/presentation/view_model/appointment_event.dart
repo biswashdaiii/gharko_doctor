@@ -9,7 +9,6 @@ abstract class AppointmentEvent extends Equatable {
 
 class SelectDate extends AppointmentEvent {
   final DateTime date;
-
   const SelectDate(this.date);
 
   @override
@@ -18,7 +17,6 @@ class SelectDate extends AppointmentEvent {
 
 class SelectTimeSlot extends AppointmentEvent {
   final String timeSlot;
-
   const SelectTimeSlot(this.timeSlot);
 
   @override
@@ -27,10 +25,12 @@ class SelectTimeSlot extends AppointmentEvent {
 
 class BookAppointment extends AppointmentEvent {
   final String doctorId;
-  final DateTime selectedDate;
+  final DateTime selectedDate;  // DateTime here, not String
   final String selectedTime;
   final double fee;
   final Map<String, dynamic> docData;
+  final Map<String, dynamic> userData;
+  final DateTime createdDate;   // DateTime here, not String
 
   const BookAppointment({
     required this.doctorId,
@@ -38,9 +38,18 @@ class BookAppointment extends AppointmentEvent {
     required this.selectedTime,
     required this.fee,
     required this.docData,
+    required this.userData,
+    required this.createdDate,
   });
 
   @override
-  List<Object?> get props =>
-      [doctorId, selectedDate, selectedTime, fee, docData];
+  List<Object?> get props => [
+        doctorId,
+        selectedDate,
+        selectedTime,
+        fee,
+        docData,
+        userData,
+        createdDate,
+      ];
 }

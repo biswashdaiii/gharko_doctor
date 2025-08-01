@@ -186,12 +186,12 @@ Future<void> _initProfileModule() async {
 
 // Appointment Module
 Future<void> _initAppointmentModule() async {
-  serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
-    () => AppointmentRemoteDataSourceImpl(
-      client: serviceLocator<http.Client>(),
-      apiService: serviceLocator<ApiService>(),
-    ),
-  );
+serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
+  () => AppointmentRemoteDataSourceImpl(
+    client: serviceLocator<http.Client>(),
+    apiService: serviceLocator<ApiService>(),
+  ),
+);
 
   serviceLocator.registerLazySingleton<IAppointmentRepository>(
     () => AppointmentRepositoryImpl(

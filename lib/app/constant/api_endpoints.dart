@@ -21,7 +21,7 @@ class ApiEndpoints {
 
   // Appointment
   static const String getAppointments = "appointments";
-  static const String bookAppointment = "book-appointment";
+  static const String bookAppointment = "user/book-appointment";
   static String getAppointmentById(String id) => "appointments/$id";
   static String cancelAppointment(String id) => "appointments/$id/cancel";
   static String completeAppointment(String id) => "appointments/$id/complete";

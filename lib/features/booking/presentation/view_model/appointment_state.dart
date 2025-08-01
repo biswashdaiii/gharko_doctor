@@ -32,6 +32,5 @@ class AppointmentState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [selectedDate, selectedTimeSlot, isLoading, bookingSuccess, errorMessage];
+  List<Object?> get props => [selectedDate, selectedTimeSlot, isLoading, bookingSuccess, errorMessage];
 }
