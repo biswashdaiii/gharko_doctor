@@ -40,7 +40,7 @@ class _MainDashboardState extends State<MainDashboard> {
         selectedSpeciality: selectedSpeciality ?? 'All',
       ),
       const MyAppointmentsPage(),
-      const ProfilePage(userId: '',),
+      const ProfilePage(userId: '68720835b6b37497fca02836',),
     ];
 
     return Scaffold(

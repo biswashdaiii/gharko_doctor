@@ -27,5 +27,6 @@ class ApiEndpoints {
   static String completeAppointment(String id) => "appointments/$id/complete";
   static String updateAppointment(String id) => "appointments/$id";
   //profile
-  
+  static const String getProfile = "user/get-profile";
+  static const String updateProfile = "user/update-profile";
 }

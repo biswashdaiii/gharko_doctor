@@ -15,7 +15,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LoadProfile>((event, emit) async {
       emit(state.copyWith(isLoading: true, error: null));
       try {
-        final profile = await getProfileUseCase(event.userId);
+        final profile = await getProfileUseCase();
         emit(state.copyWith(profile: profile, isLoading: false));
       } catch (e) {
         emit(state.copyWith(error: e.toString(), isLoading: false));
@@ -26,7 +26,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(isLoading: true, error: null));
       try {
         await updateProfileUseCase(event.profile);
-        emit(state.copyWith(profile: event.profile, isLoading: false));
+        final freshProfile = await getProfileUseCase();
+        emit(state.copyWith(profile: freshProfile, isLoading: false));
       } catch (e) {
         emit(state.copyWith(error: e.toString(), isLoading: false));
       }

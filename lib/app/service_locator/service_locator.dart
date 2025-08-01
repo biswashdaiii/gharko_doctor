@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:gharko_doctor/app/sharedPref/token_helper.dart';
 import 'package:gharko_doctor/features/myappointments/data/datasource/myappointments_remotedatasource.dart';
 import 'package:gharko_doctor/features/myappointments/data/repository/myapppointment_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,6 +65,10 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton<TokenSharedPrefs>(
     () => TokenSharedPrefs(sharedPreferences: serviceLocator<SharedPreferences>()),
   );
+  // Register TokenHelper
+serviceLocator.registerLazySingleton<TokenHelper>(
+  () => TokenHelper(serviceLocator<TokenSharedPrefs>()),
+);
 
   // Register http.Client once for http requests
   serviceLocator.registerLazySingleton<http.Client>(() => http.Client());

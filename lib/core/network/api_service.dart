@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:gharko_doctor/app/constant/api_endpoints.dart';
 import 'package:gharko_doctor/core/network/dio_error_interceptor.dart';
@@ -74,5 +76,24 @@ class ApiService {
       data: data,
       options: Options(headers: headers),
     );
+  }
+
+  /// ✅ Multipart helper method for image upload
+  Future<FormData> createMultipartData({
+    required Map<String, dynamic> data,
+    String? fileField,
+    String? filePath,
+  }) async {
+    final formDataMap = Map<String, dynamic>.from(data);
+
+    if (fileField != null && filePath != null && filePath.isNotEmpty) {
+      final file = await MultipartFile.fromFile(
+        filePath,
+        filename: filePath.split('/').last,
+      );
+      formDataMap[fileField] = file;
+    }
+
+    return FormData.fromMap(formDataMap);
   }
 }

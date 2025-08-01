@@ -6,7 +6,8 @@ class GetProfileUseCase {
 
   GetProfileUseCase(this.repository);
 
-  Future<UserProfileEntity> call(String userId) {
-    return repository.getProfile(userId);
+  Future<UserProfileEntity> call() {
+    // No userId needed now
+    return repository.getProfile('');
   }
 }
