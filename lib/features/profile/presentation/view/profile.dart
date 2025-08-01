@@ -1,16 +1,25 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gharko_doctor/core/network/auth_service.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gharko_doctor/features/profile/presentation/viewmodel/profile_bloc.dart';
 import 'package:gharko_doctor/features/profile/presentation/viewmodel/profile_event.dart';
 import 'package:gharko_doctor/features/profile/presentation/viewmodel/profile_state.dart';
 import 'package:gharko_doctor/features/profile/domain/entity/profile_entity.dart';
 
+//
+
 class ProfilePage extends StatefulWidget {
   final String userId;
+  final AuthService authService; // inject authService here
 
-  const ProfilePage({super.key, required this.userId});
+  const ProfilePage({
+    super.key,
+    required this.userId,
+    required this.authService,
+  });
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -44,7 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() => _selectedImage = File(pickedFile.path));
     }
@@ -53,18 +64,44 @@ class _ProfilePageState extends State<ProfilePage> {
   void _onSave(UserProfileEntity currentProfile) {
     final updatedProfile = UserProfileEntity(
       id: currentProfile.id,
-      name: nameController.text.isNotEmpty ? nameController.text : currentProfile.name,
-      phone: phoneController.text.isNotEmpty ? phoneController.text : currentProfile.phone,
-      address: addressController.text.isNotEmpty ? addressController.text : currentProfile.address,
+      name:
+          nameController.text.isNotEmpty
+              ? nameController.text
+              : currentProfile.name,
+      phone:
+          phoneController.text.isNotEmpty
+              ? phoneController.text
+              : currentProfile.phone,
+      address:
+          addressController.text.isNotEmpty
+              ? addressController.text
+              : currentProfile.address,
       avatarUrl: _selectedImage?.path ?? currentProfile.avatarUrl,
-      // Preserve email and lastSeen from existing profile (not editable here)
       email: currentProfile.email,
       lastSeen: currentProfile.lastSeen,
-      gender: currentProfile.gender,  // Keep gender from currentProfile (not editable)
-      dob: currentProfile.dob,        // Keep dob from currentProfile (not editable)
+      gender: currentProfile.gender,
+      dob: currentProfile.dob,
     );
 
     context.read<ProfileBloc>().add(UpdateProfile(updatedProfile));
+  }
+
+  Future<void> _logout() async {
+    final result = await widget.authService.logout();
+
+    result.fold(
+      (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed: ${failure.message}')),
+        );
+      },
+      (_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => LoginScreen()),
+        );
+      },
+    );
   }
 
   @override
@@ -77,9 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
           _populateControllers(state.profile!);
         }
         if (state.error != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error!)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error!)));
         }
       },
       builder: (context, state) {
@@ -98,6 +135,13 @@ class _ProfilePageState extends State<ProfilePage> {
             centerTitle: true,
             backgroundColor: theme.primaryColor,
             elevation: 2,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout),
+                tooltip: 'Logout',
+                onPressed: _logout,
+              ),
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(24),
@@ -113,14 +157,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         CircleAvatar(
                           radius: 60,
                           backgroundColor: Colors.grey[200],
-                          backgroundImage: _selectedImage != null
-                              ? FileImage(_selectedImage!)
-                              : (profile.avatarUrl.isNotEmpty
-                                  ? NetworkImage("http://192.168.1.77:5050/${profile.avatarUrl}")
-                                  : null) as ImageProvider<Object>?,
-                          child: profile.avatarUrl.isEmpty && _selectedImage == null
-                              ? Icon(Icons.person, size: 60, color: Colors.grey[400])
-                              : null,
+                          backgroundImage:
+                              _selectedImage != null
+                                  ? FileImage(_selectedImage!)
+                                  : (profile.avatarUrl.isNotEmpty
+                                          ? NetworkImage(
+                                            "http://192.168.1.77:5050/${profile.avatarUrl}",
+                                          )
+                                          : null)
+                                      as ImageProvider<Object>?,
+                          child:
+                              profile.avatarUrl.isEmpty &&
+                                      _selectedImage == null
+                                  ? Icon(
+                                    Icons.person,
+                                    size: 60,
+                                    color: Colors.grey[400],
+                                  )
+                                  : null,
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -129,7 +183,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border.all(color: Colors.white, width: 2),
                           ),
                           padding: const EdgeInsets.all(6),
-                          child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                          child: const Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ],
                     ),
@@ -139,7 +197,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     controller: nameController,
                     decoration: InputDecoration(
                       labelText: 'Name',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       prefixIcon: const Icon(Icons.person),
                     ),
                   ),
@@ -149,7 +209,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       labelText: 'Phone',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       prefixIcon: const Icon(Icons.phone),
                     ),
                   ),
@@ -158,7 +220,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     controller: addressController,
                     decoration: InputDecoration(
                       labelText: 'Address',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       prefixIcon: const Icon(Icons.location_on),
                     ),
                   ),
@@ -169,12 +233,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: ElevatedButton(
                       onPressed: () => _onSave(profile),
                       style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         elevation: 4,
                       ),
                       child: const Text(
                         "Update Profile",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

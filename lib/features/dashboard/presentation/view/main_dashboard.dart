@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gharko_doctor/core/network/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gharko_doctor/features/dashboard/domain/entity/doctor_entity.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/doctor_page.dart';
 import 'package:gharko_doctor/features/myappointments/presentation/view/myappointment_page.dart';
 import 'package:gharko_doctor/features/profile/presentation/view/profile.dart';
 import 'package:gharko_doctor/screens/view/search.dart';
 import 'package:gharko_doctor/features/dashboard/presentation/view/home.dart';
+import 'package:gharko_doctor/app/sharedPref/token_shared_pref.dart';
+
 
 class MainDashboard extends StatefulWidget {
   const MainDashboard({super.key});
@@ -17,9 +21,22 @@ class MainDashboard extends StatefulWidget {
 class _MainDashboardState extends State<MainDashboard> {
   int _selectedIndex = 0;
   String? selectedSpeciality;
-
-  // Temporary empty list; update with real data later
   List<DoctorEntity> recentDoctors = [];
+
+  AuthService? authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuthService();
+  }
+
+  Future<void> _initAuthService() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tokenPrefs = TokenSharedPrefs(sharedPreferences: prefs);
+    authService = AuthService(tokenPrefs: tokenPrefs);
+    setState(() {}); // rebuild now that authService is ready
+  }
 
   void _onSpecialitySelected(String speciality) {
     setState(() {
@@ -30,6 +47,13 @@ class _MainDashboardState extends State<MainDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    if (authService == null) {
+      // Show loading until authService initialized
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     final List<Widget> screens = [
       Home(
         onSpecialityTap: _onSpecialitySelected,
@@ -40,7 +64,10 @@ class _MainDashboardState extends State<MainDashboard> {
         selectedSpeciality: selectedSpeciality ?? 'All',
       ),
       const MyAppointmentsPage(),
-      const ProfilePage(userId: '68720835b6b37497fca02836',),
+      ProfilePage(
+        userId: '68720835b6b37497fca02836',
+        authService: authService!,
+      ),
     ];
 
     return Scaffold(
@@ -61,7 +88,7 @@ class _MainDashboardState extends State<MainDashboard> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.chartBar), label: 'chat'),
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.chartBar), label: 'Chat'),
           BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.stethoscope), label: 'Doctors'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Appointments'),
           BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.user), label: 'Profile'),

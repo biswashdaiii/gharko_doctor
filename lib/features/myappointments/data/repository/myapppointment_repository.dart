@@ -26,7 +26,7 @@ class MyAppointmentRepositoryImpl implements IMyAppointmentRepository {
   @override
   Future<Either<Failure, void>> cancelAppointment(String appointmentId, String token) async {
     try {
-      await remoteDataSource.cancelAppointment(token, appointmentId);
+      await remoteDataSource.cancelAppointment(appointmentId,token );
       return const Right(null);
     } catch (e) {
       return Left(RemoteDatabaseFailure(message: 'Failed to cancel appointment'));

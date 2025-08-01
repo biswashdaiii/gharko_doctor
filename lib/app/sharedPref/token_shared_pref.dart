@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:gharko_doctor/core/error/failure.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenSharedPrefs {
@@ -11,12 +10,13 @@ class TokenSharedPrefs {
 
   Future<Either<Failure, void>> saveToken(String token) async {
     try {
-      await _sharedPreferences.setString('token', token);
+      final success = await _sharedPreferences.setString('token', token);
+      if (!success) {
+        return Left(SharedPreferencesFailure(message: 'Failed to save token'));
+      }
       return const Right(null);
     } catch (e) {
-      return Left(
-        SharedPreferencesFailure(message: 'Failed to save token: $e'),
-      );
+      return Left(SharedPreferencesFailure(message: 'Failed to save token: $e'));
     }
   }
 
@@ -25,15 +25,16 @@ class TokenSharedPrefs {
       final token = _sharedPreferences.getString('token');
       return Right(token);
     } catch (e) {
-      return Left(
-        SharedPreferencesFailure(message: 'Failed to retrieve token: $e'),
-      );
+      return Left(SharedPreferencesFailure(message: 'Failed to retrieve token: $e'));
     }
   }
 
   Future<Either<Failure, void>> clearToken() async {
     try {
-      await _sharedPreferences.remove('token');
+      final success = await _sharedPreferences.remove('token');
+      if (!success) {
+        return Left(SharedPreferencesFailure(message: 'Failed to clear token'));
+      }
       return const Right(null);
     } catch (e) {
       return Left(SharedPreferencesFailure(message: 'Failed to clear token: $e'));

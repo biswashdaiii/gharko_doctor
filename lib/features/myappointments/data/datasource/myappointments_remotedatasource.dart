@@ -44,22 +44,27 @@ class MyAppointmentRemoteDataSourceImpl implements MyAppointmentRemoteDataSource
     }
   }
 
-  @override
-  Future<void> cancelAppointment(String appointmentId, String token) async {
-    final response = await client.post(
-      Uri.parse('$baseUrl/cancel-appointment'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({'appointmentId': appointmentId}),
-    );
+ @override
+Future<void> cancelAppointment(String appointmentId, String token) async {
+  print('Cancelling appointment: $appointmentId');
+  final response = await client.post(
+    Uri.parse('$baseUrl/cancel-appointment'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode({'appointmentId': appointmentId}),
+  );
 
-    if (response.statusCode != 200) {
-      throw ServerException(
-        message: 'Failed to cancel appointment',
-        statusCode: response.statusCode,
-      );
-    }
+  print('Cancel response: ${response.statusCode} - ${response.body}');
+
+  if (response.statusCode != 200) {
+    final responseData = jsonDecode(response.body);
+    throw ServerException(
+      message: responseData['message'] ?? 'Failed to cancel appointment',
+      statusCode: response.statusCode,
+    );
   }
+}
+
 }
