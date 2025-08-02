@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gharko_doctor/app/service_locator/service_locator.dart';
+import 'package:gharko_doctor/app/sharedPref/token_helper.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/get_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/send_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/presentation/view/chatPage.dart';
+import 'package:gharko_doctor/features/chat/presentation/view_model/chat_bloc.dart';
 import 'package:gharko_doctor/features/myappointments/domain/entitiy/myapppointment_entity.dart';
 
 import 'package:gharko_doctor/features/myappointments/domain/usecase/cancel_appointment_usecase.dart';
@@ -86,20 +92,23 @@ class AppointmentCard extends StatelessWidget {
   void _showCancelConfirmationDialog(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Cancel Appointment'),
-        content: const Text('Are you sure you want to cancel this appointment?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('No'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Cancel Appointment'),
+            content: const Text(
+              'Are you sure you want to cancel this appointment?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes, Cancel'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Yes, Cancel'),
-          ),
-        ],
-      ),
     );
 
     if (confirmed == true) {
@@ -121,9 +130,10 @@ class AppointmentCard extends StatelessWidget {
     final doctorName = doctor['name'] ?? 'Unknown Doctor';
     final specialty = doctor['speciality'] ?? '';
     final imagePath = doctor['image'] ?? '';
-    final imageUrl = imagePath.isNotEmpty
-        ? 'http://192.168.1.77:5050/${imagePath.replaceAll("\\", "/")}'
-        : '';
+    final imageUrl =
+        imagePath.isNotEmpty
+            ? 'http://192.168.1.77:5050/${imagePath.replaceAll("\\", "/")}'
+            : '';
 
     return Card(
       elevation: 4,
@@ -140,16 +150,17 @@ class AppointmentCard extends StatelessWidget {
                   backgroundColor: Colors.teal.shade50,
                   backgroundImage:
                       imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-                  child: imageUrl.isEmpty
-                      ? Text(
-                          doctorName.isNotEmpty ? doctorName[0] : '',
-                          style: const TextStyle(
-                            color: Colors.teal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )
-                      : null,
+                  child:
+                      imageUrl.isEmpty
+                          ? Text(
+                            doctorName.isNotEmpty ? doctorName[0] : '',
+                            style: const TextStyle(
+                              color: Colors.teal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                          )
+                          : null,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -192,12 +203,30 @@ class AppointmentCard extends StatelessWidget {
                 if (!isCancelled)
                   ElevatedButton.icon(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Chat feature coming soon!'),
+                      final chatUserId = doctor['_id'];
+                      final chatUserName = doctor['name'];
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => BlocProvider<ChatBloc>(
+                                create:
+                                    (_) => ChatBloc(
+                                      getMessagesUseCase:
+                                          serviceLocator<GetMessagesUseCase>(),
+                                      sendMessageUseCase:
+                                          serviceLocator<SendMessageUseCase>(), tokenHelper: serviceLocator<TokenHelper>(),
+                                    ),
+                                child: ChatPage(
+                                  chatUserId: chatUserId,
+                                  chatUserName: chatUserName,
+                                ),
+                              ),
                         ),
                       );
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
                       shape: RoundedRectangleBorder(
@@ -211,21 +240,21 @@ class AppointmentCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 isCancelled
                     ? const Text(
-                        "Cancelled",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : OutlinedButton.icon(
-                        onPressed: () => _showCancelConfirmationDialog(context),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.red,
-                          side: const BorderSide(color: Colors.red),
-                        ),
-                        icon: const Icon(Icons.cancel, size: 18),
-                        label: const Text("Cancel"),
+                      "Cancelled",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
+                    )
+                    : OutlinedButton.icon(
+                      onPressed: () => _showCancelConfirmationDialog(context),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.red,
+                        side: const BorderSide(color: Colors.red),
+                      ),
+                      icon: const Icon(Icons.cancel, size: 18),
+                      label: const Text("Cancel"),
+                    ),
               ],
             ),
           ],

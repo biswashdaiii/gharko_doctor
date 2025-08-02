@@ -1,6 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:gharko_doctor/app/sharedPref/token_helper.dart';
+import 'package:gharko_doctor/features/chat/data/datasource/chat_remotedata_source.dart';
+import 'package:gharko_doctor/features/chat/data/repository/chat_implRepository.dart';
+import 'package:gharko_doctor/features/chat/domain/repository/chat_IRepository.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/get_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/send_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/presentation/view_model/chat_bloc.dart';
 import 'package:gharko_doctor/features/myappointments/data/datasource/myappointments_remotedatasource.dart';
 import 'package:gharko_doctor/features/myappointments/data/repository/myapppointment_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,12 +69,14 @@ Future<void> initDependencies() async {
 
   // Register TokenSharedPrefs once (uses SharedPreferences)
   serviceLocator.registerLazySingleton<TokenSharedPrefs>(
-    () => TokenSharedPrefs(sharedPreferences: serviceLocator<SharedPreferences>()),
+    () => TokenSharedPrefs(
+      sharedPreferences: serviceLocator<SharedPreferences>(),
+    ),
   );
   // Register TokenHelper
-serviceLocator.registerLazySingleton<TokenHelper>(
-  () => TokenHelper(serviceLocator<TokenSharedPrefs>()),
-);
+  serviceLocator.registerLazySingleton<TokenHelper>(
+    () => TokenHelper(serviceLocator<TokenSharedPrefs>()),
+  );
 
   // Register http.Client once for http requests
   serviceLocator.registerLazySingleton<http.Client>(() => http.Client());
@@ -84,7 +92,8 @@ serviceLocator.registerLazySingleton<TokenHelper>(
   await _initDoctorModule();
   await _initProfileModule();
   await _initAppointmentModule();
-  await _initMyAppointmentsModule();  // <--- Added this line
+  await _initMyAppointmentsModule();
+  await _initChatModule();
 }
 
 // Splash Module
@@ -103,23 +112,33 @@ Future<void> _initUserModule() async {
   );
 
   serviceLocator.registerFactory<UserRemoteRepository>(
-    () => UserRemoteRepository(userRemoteDatasource: serviceLocator<UserRemoteDatasource>()),
+    () => UserRemoteRepository(
+      userRemoteDatasource: serviceLocator<UserRemoteDatasource>(),
+    ),
   );
 
   serviceLocator.registerFactory<UserLocalRepository>(
-    () => UserLocalRepository(userLocalDataSource: serviceLocator<UserLocalDataSource>()),
+    () => UserLocalRepository(
+      userLocalDataSource: serviceLocator<UserLocalDataSource>(),
+    ),
   );
 
   serviceLocator.registerFactory<UserRegisterUseCase>(
-    () => UserRegisterUseCase(userRepository: serviceLocator<UserRemoteRepository>()),
+    () => UserRegisterUseCase(
+      userRepository: serviceLocator<UserRemoteRepository>(),
+    ),
   );
 
   serviceLocator.registerFactory<UserLoginUsecase>(
-    () => UserLoginUsecase(userRepository: serviceLocator<UserRemoteRepository>()),
+    () => UserLoginUsecase(
+      userRepository: serviceLocator<UserRemoteRepository>(),
+    ),
   );
 
   serviceLocator.registerLazySingleton<RegisterViewModel>(
-    () => RegisterViewModel(registerUseCase: serviceLocator<UserRegisterUseCase>()),
+    () => RegisterViewModel(
+      registerUseCase: serviceLocator<UserRegisterUseCase>(),
+    ),
   );
 
   serviceLocator.registerFactory<LoginViewModel>(
@@ -144,13 +163,16 @@ Future<void> _initDoctorModule() async {
   );
 
   serviceLocator.registerLazySingleton<GetDoctorsBySpecialityUseCase>(
-    () => GetDoctorsBySpecialityUseCase(repository: serviceLocator<IDoctorRepository>()),
+    () => GetDoctorsBySpecialityUseCase(
+      repository: serviceLocator<IDoctorRepository>(),
+    ),
   );
 
   serviceLocator.registerFactory<DoctorBloc>(
     () => DoctorBloc(
       getAllDoctorsUseCase: serviceLocator<GetAllDoctorsUseCase>(),
-      getDoctorsBySpecialityUseCase: serviceLocator<GetDoctorsBySpecialityUseCase>(),
+      getDoctorsBySpecialityUseCase:
+          serviceLocator<GetDoctorsBySpecialityUseCase>(),
     ),
   );
 }
@@ -158,7 +180,9 @@ Future<void> _initDoctorModule() async {
 // Profile Module
 Future<void> _initProfileModule() async {
   serviceLocator.registerLazySingleton<IUserProfileRemoteDataSource>(
-    () => UserProfileRemoteDataSourceImpl(apiService: serviceLocator<ApiService>()),
+    () => UserProfileRemoteDataSourceImpl(
+      apiService: serviceLocator<ApiService>(),
+    ),
   );
 
   serviceLocator.registerLazySingleton<IUserProfileRepository>(
@@ -186,12 +210,12 @@ Future<void> _initProfileModule() async {
 
 // Appointment Module
 Future<void> _initAppointmentModule() async {
-serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
-  () => AppointmentRemoteDataSourceImpl(
-    client: serviceLocator<http.Client>(),
-    apiService: serviceLocator<ApiService>(),
-  ),
-);
+  serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
+    () => AppointmentRemoteDataSourceImpl(
+      client: serviceLocator<http.Client>(),
+      apiService: serviceLocator<ApiService>(),
+    ),
+  );
 
   serviceLocator.registerLazySingleton<IAppointmentRepository>(
     () => AppointmentRepositoryImpl(
@@ -217,7 +241,9 @@ serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
 Future<void> _initMyAppointmentsModule() async {
   // Remote data source
   serviceLocator.registerLazySingleton<MyAppointmentRemoteDataSource>(
-    () => MyAppointmentRemoteDataSourceImpl(client: serviceLocator<http.Client>()),
+    () => MyAppointmentRemoteDataSourceImpl(
+      client: serviceLocator<http.Client>(),
+    ),
   );
 
   // Repository
@@ -247,7 +273,42 @@ Future<void> _initMyAppointmentsModule() async {
   serviceLocator.registerFactory<MyAppointmentsBloc>(
     () => MyAppointmentsBloc(
       getUserAppointmentsUseCase: serviceLocator<GetUserAppointmentsUseCase>(),
-      cancelUserAppointmentUseCase: serviceLocator<CancelUserAppointmentUseCase>(),
+      cancelUserAppointmentUseCase:
+          serviceLocator<CancelUserAppointmentUseCase>(),
+    ),
+  );
+}
+
+// Chat Module
+Future<void> _initChatModule() async {
+  // Register ChatRemoteDataSource
+  serviceLocator.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(apiService: serviceLocator<ApiService>()),
+  );
+
+  // Register ChatRepository
+  serviceLocator.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(
+      remoteDataSource: serviceLocator<ChatRemoteDataSource>(),
+    ),
+  );
+
+  // Register UseCases
+  serviceLocator.registerLazySingleton<GetMessagesUseCase>(
+    () => GetMessagesUseCase(serviceLocator<ChatRepository>()),
+  );
+
+  serviceLocator.registerLazySingleton<SendMessageUseCase>(
+    () => SendMessageUseCase(serviceLocator<ChatRepository>()),
+  );
+
+  // Register ChatBloc
+  serviceLocator.registerFactory<ChatBloc>(
+    () => ChatBloc(
+      getMessagesUseCase: serviceLocator<GetMessagesUseCase>(),
+      sendMessageUseCase: serviceLocator<SendMessageUseCase>(), 
+        tokenHelper: serviceLocator<TokenHelper>(),
+      
     ),
   );
 }
