@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gharko_doctor/app/service_locator/service_locator.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_event.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_event.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_state.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_event.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_state.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});

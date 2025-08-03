@@ -5,18 +5,28 @@ class ApiEndpoints {
   static const connectionTimeout = Duration(seconds: 1000);
   static const receiveTimeout = Duration(seconds: 1000);
 
-  // For Android Emulator
-  static const String serverAddress = "http://10.0.2.2:5050";
-
-  // For iPhone (uncomment if needed)
+  // Server Base
+  // static const String serverAddress = "http://192.168.1.77:5050";
   static const String baseUrl = "$serverAddress/api/";
+    // For Android Emulator
+  static const String serverAddress = "http://192.168.1.77:5050";
 
   // Auth
   static const String login = "auth/login";
   static const String register = "auth/register";
 
-  // Doctor Endpoints
-  static const String getAllDoctors = "doctor/list"; // GET: api/doctor
-  static const String getDoctorsBySpeciality = "doctor"; // GET: api/doctor?speciality={speciality}
-  // static const String getDoctorById = "doctor"; // GET: api/doctor/
+  // Doctor
+  static const String getAllDoctors = "doctor/list";
+  static const String getDoctorsBySpeciality = "doctor";
+
+  // Appointment
+  static const String getAppointments = "appointments";
+  static const String bookAppointment = "user/book-appointment";
+  static String getAppointmentById(String id) => "appointments/$id";
+  static String cancelAppointment(String id) => "appointments/$id/cancel";
+  static String completeAppointment(String id) => "appointments/$id/complete";
+  static String updateAppointment(String id) => "appointments/$id";
+  //profile
+  static const String getProfile = "user/get-profile";
+  static const String updateProfile = "user/update-profile";
 }

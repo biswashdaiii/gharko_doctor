@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:gharko_doctor/core/error/failure.dart';
-import 'package:dartz/dartz.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
 import 'doctor_event.dart';

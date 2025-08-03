@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gharko_doctor/features/booking/presentation/view/appointment_page.dart';
 import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
 import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
 import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_event.dart';
@@ -37,7 +38,8 @@ class _DashboardState extends State<Dashboard> {
 
     doctorBloc = DoctorBloc(
       getAllDoctorsUseCase: serviceLocator<GetAllDoctorsUseCase>(),
-      getDoctorsBySpecialityUseCase: serviceLocator<GetDoctorsBySpecialityUseCase>(),
+      getDoctorsBySpecialityUseCase:
+          serviceLocator<GetDoctorsBySpecialityUseCase>(),
     );
 
     // Fetch all doctors at start
@@ -55,21 +57,32 @@ class _DashboardState extends State<Dashboard> {
     return BlocProvider.value(
       value: doctorBloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Find Your Related Doctor')),
+        appBar: AppBar(
+          title: const Text(
+            'Find Your Related Doctor',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          backgroundColor: Colors.teal,
+          elevation: 0,
+        ),
         body: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Doctors',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'Available Doctors',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
               // Specialty filter as horizontal buttons
               SizedBox(
-                height: 40,
+                height: 45,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: specialties.length,
@@ -79,7 +92,13 @@ class _DashboardState extends State<Dashboard> {
                     final bool isSelected = speciality == selectedSpeciality;
 
                     return ChoiceChip(
-                      label: Text(speciality),
+                      label: Text(
+                        speciality,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
                       selected: isSelected,
                       onSelected: (_) {
                         setState(() {
@@ -87,6 +106,7 @@ class _DashboardState extends State<Dashboard> {
                         });
                       },
                       selectedColor: Colors.teal,
+                      backgroundColor: Colors.grey.shade200,
                       labelStyle: TextStyle(
                         color: isSelected ? Colors.white : Colors.black,
                       ),
@@ -95,7 +115,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               Expanded(
                 child: BlocBuilder<DoctorBloc, DoctorState>(
@@ -105,53 +125,125 @@ class _DashboardState extends State<Dashboard> {
                     } else if (state is DoctorLoaded) {
                       allDoctors = state.doctors;
 
-                      // Filter doctors by selected speciality if not "All"
-                      List<DoctorEntity> filteredDoctors = selectedSpeciality == 'All'
-                          ? allDoctors
-                          : allDoctors
-                              .where((d) =>
-                                  d.speciality.toLowerCase() ==
-                                  selectedSpeciality.toLowerCase())
-                              .toList();
+                      List<DoctorEntity> filteredDoctors =
+                          selectedSpeciality == 'All'
+                              ? allDoctors
+                              : allDoctors
+                                  .where(
+                                    (d) =>
+                                        d.speciality.toLowerCase() ==
+                                        selectedSpeciality.toLowerCase(),
+                                  )
+                                  .toList();
 
-                      // Show max 3 doctors only (recent 3)
-                      final recentDoctors = filteredDoctors.length > 3
-                          ? filteredDoctors.sublist(0, 3)
-                          : filteredDoctors;
+                      final recentDoctors =
+                          filteredDoctors.length > 10
+                              ? filteredDoctors.sublist(0, 3)
+                              : filteredDoctors;
 
                       if (recentDoctors.isEmpty) {
-                        return const Center(child: Text('No doctors available'));
+                        return const Center(
+                          child: Text(
+                            'No doctors available',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        );
                       }
 
                       return ListView.separated(
                         itemCount: recentDoctors.length,
-                        separatorBuilder: (_, __) => const Divider(),
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final doctor = recentDoctors[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.teal,
-                              child: Text(
-                                doctor.name.isNotEmpty
-                                    ? doctor.name[0]
-                                    : '',
+                          return Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  blurRadius: 10,
+                                  spreadRadius: 1,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                radius: 28,
+                                backgroundColor: Colors.teal.shade50,
+                                backgroundImage:
+                                    doctor.imageUrl.isNotEmpty
+                                        ? NetworkImage(
+                                          'http://192.168.1.77:5050/${doctor.imageUrl}',
+                                        )
+                                        : null,
+                                child:
+                                    doctor.imageUrl.isEmpty
+                                        ? Text(
+                                          doctor.name.isNotEmpty
+                                              ? doctor.name[0]
+                                              : '',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                        : null,
+                              ),
+                              title: Text(
+                                doctor.name,
                                 style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
                                 ),
                               ),
+                              subtitle: Text(
+                                '${doctor.speciality} · ${doctor.degree}',
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              trailing: Text(
+                                '\$${doctor.fee}',
+                                style: const TextStyle(
+                                  color: Colors.teal,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => AppointmentPage(
+                                          doctorId: doctor.id,
+                                          doctorName: doctor.name,
+                                          specialty: doctor.speciality,
+                                          about:
+                                              doctor.about ??
+                                              "No details available",
+                                          fee: doctor.fee.toDouble(),
+                                          experienceYears: 0,
+                                          doctorImageUrl:
+                                              'http://192.168.1.77:5050/${doctor.imageUrl}',
+                                        ),
+                                  ),
+                                );
+                              },
                             ),
-                            title: Text(doctor.name),
-                            subtitle: Text('${doctor.speciality} - ${doctor.degree}'),
-                            trailing: Text('\$${doctor.fee}'),
-                            onTap: () {
-                              // Optional: open detailed doctor info page
-                            },
                           );
                         },
                       );
                     } else if (state is DoctorError) {
-                      return Center(child: Text(state.message));
+                      return Center(
+                        child: Text(
+                          state.message,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      );
                     } else {
                       return const SizedBox.shrink();
                     }

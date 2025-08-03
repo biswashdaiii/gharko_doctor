@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
-import 'package:lottie/lottie.dart';
 import 'package:gharko_doctor/app/service_locator/service_locator.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
+import 'package:lottie/lottie.dart';
 
-class SplashScreenView extends StatefulWidget {
+class SplashScreenView extends StatelessWidget {
   const SplashScreenView({super.key});
 
-  @override
-  State<SplashScreenView> createState() => _SplashScreenViewState();
-}
-
-class _SplashScreenViewState extends State<SplashScreenView> {
-  @override
-  void initState() {
-    super.initState();
+  void _navigateToLogin(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => BlocProvider<LoginViewModel>(
-            create: (_) => serviceLocator<LoginViewModel>(),
-            child: LoginScreen(),
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BlocProvider<LoginViewModel>(
+              create: (_) => serviceLocator<LoginViewModel>(),
+              child:  LoginScreen(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Trigger navigation after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) => _navigateToLogin(context));
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(

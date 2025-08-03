@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:gharko_doctor/features/doctor/domain/entity/doctor_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-
 part 'doctor_api_model.g.dart';
 
 @JsonSerializable()
@@ -15,8 +14,11 @@ class DoctorApiModel extends Equatable {
   final String speciality;
   final String degree;
   final String experience;
-  @JsonKey(name: 'avaiable')
+
+  // Fixed typo here, added defaultValue to avoid null error
+  @JsonKey(name: 'available', defaultValue: false)
   final bool available;
+
   final int fee;
   final String about;
   final String date;
@@ -42,7 +44,7 @@ class DoctorApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$DoctorApiModelToJson(this);
 
-  // to domain entity
+  // Convert API model to domain entity
   DoctorEntity toEntity() {
     return DoctorEntity(
       id: id ?? '',
@@ -60,7 +62,7 @@ class DoctorApiModel extends Equatable {
     );
   }
 
-  // from domain entity
+  // Convert domain entity to API model
   factory DoctorApiModel.fromEntity(DoctorEntity entity) {
     return DoctorApiModel(
       id: entity.id,

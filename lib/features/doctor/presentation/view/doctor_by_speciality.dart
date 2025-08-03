@@ -8,7 +8,7 @@ import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_sta
 class DoctorsBySpecialityPage extends StatefulWidget {
   final String speciality;
 
-  const DoctorsBySpecialityPage({Key? key, required this.speciality}) : super(key: key);
+  const DoctorsBySpecialityPage({super.key, required this.speciality});
 
   @override
   State<DoctorsBySpecialityPage> createState() => _DoctorsBySpecialityPageState();

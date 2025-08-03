@@ -1,7 +1,18 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:gharko_doctor/app/sharedPref/token_helper.dart';
+import 'package:gharko_doctor/features/chat/data/datasource/chat_remotedata_source.dart';
+import 'package:gharko_doctor/features/chat/data/repository/chat_implRepository.dart';
+import 'package:gharko_doctor/features/chat/domain/repository/chat_IRepository.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/get_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/domain/usecase/send_message_usecase.dart';
+import 'package:gharko_doctor/features/chat/presentation/view_model/chat_bloc.dart';
+import 'package:gharko_doctor/features/myappointments/data/datasource/myappointments_remotedatasource.dart';
+import 'package:gharko_doctor/features/myappointments/data/repository/myapppointment_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:gharko_doctor/app/constant/api_endpoints.dart';
+import 'package:gharko_doctor/app/sharedPref/token_shared_pref.dart';
 import 'package:gharko_doctor/core/network/api_service.dart';
 import 'package:gharko_doctor/core/network/hive_services.dart';
 
@@ -14,106 +25,290 @@ import 'package:gharko_doctor/features/authentication/domain/usecase/login_useca
 import 'package:gharko_doctor/features/authentication/domain/usecase/register_usecase.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
-import 'package:gharko_doctor/features/doctor/data/data_source/doctor_datasource.dart';
+
+// Booking imports
+import 'package:gharko_doctor/features/booking/data/data_source/appointment_remote_datasource.dart';
+import 'package:gharko_doctor/features/booking/data/repository/appointment_repository_impl.dart';
+import 'package:gharko_doctor/features/booking/domain/repository/appointment_repository.dart';
+import 'package:gharko_doctor/features/booking/domain/usecase/book_appointment_usecase.dart';
+import 'package:gharko_doctor/features/booking/presentation/view_model/appointment_bloc.dart';
+
+// Dashboard/Doctor imports
+import 'package:gharko_doctor/features/doctor/data/data_source/doctor_remote_datasource.dart';
+import 'package:gharko_doctor/features/doctor/data/repository/doctor_remote_repository.dart';
+import 'package:gharko_doctor/features/doctor/domain/repository/doctor_repository.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_all_doctor_usecase.dart';
 import 'package:gharko_doctor/features/doctor/domain/usecase/get_doctor_byspeciality_usecase.dart';
 import 'package:gharko_doctor/features/doctor/presentation/view_model/doctor_bloc.dart';
 
+// Profile imports
+import 'package:gharko_doctor/features/profile/data/datasource/profile_remotedatasource.dart';
+import 'package:gharko_doctor/features/profile/data/repository/profile_repositoryImpl.dart';
+import 'package:gharko_doctor/features/profile/domain/reposittory/profile_repository.dart';
+import 'package:gharko_doctor/features/profile/domain/usecase/getprofile_usecase.dart';
+import 'package:gharko_doctor/features/profile/domain/usecase/updateprofile_usecase.dart';
+import 'package:gharko_doctor/features/profile/presentation/viewmodel/profile_bloc.dart';
+
 // Splash
 import 'package:gharko_doctor/features/splash/presentation/view_model/splash_view_model.dart';
 
-// Doctor feature imports
-import 'package:gharko_doctor/features/doctor/data/data_source/doctor_remote_datasource.dart';
-import 'package:gharko_doctor/features/doctor/data/repository/doctor_remote_repository.dart';
-import 'package:gharko_doctor/features/doctor/domain/repository/doctor_repository.dart';
+// MyAppointments imports
+import 'package:gharko_doctor/features/myappointments/data/datasource/abstractRemotedatasource.dart';
+import 'package:gharko_doctor/features/myappointments/domain/repository/myappointment_Irepository.dart';
+import 'package:gharko_doctor/features/myappointments/domain/usecase/cancel_appointment_usecase.dart';
+import 'package:gharko_doctor/features/myappointments/domain/usecase/get_appointment_usecase.dart';
+import 'package:gharko_doctor/features/myappointments/presentation/view_model/myappointments_bloc.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  await _initHiveService();
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  // Register SharedPreferences instance
+  serviceLocator.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+
+  // Register TokenSharedPrefs once (uses SharedPreferences)
+  serviceLocator.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(
+      sharedPreferences: serviceLocator<SharedPreferences>(),
+    ),
+  );
+  // Register TokenHelper
+  serviceLocator.registerLazySingleton<TokenHelper>(
+    () => TokenHelper(serviceLocator<TokenSharedPrefs>()),
+  );
+
+  // Register http.Client once for http requests
+  serviceLocator.registerLazySingleton<http.Client>(() => http.Client());
+
+  // Register ApiService once with Dio
+  serviceLocator.registerLazySingleton<ApiService>(() => ApiService(Dio()));
+
+  // Register HiveServices once
+  serviceLocator.registerLazySingleton<HiveServices>(() => HiveServices());
+
   await _initSplashModule();
   await _initUserModule();
-  _initDoctorModule();
+  await _initDoctorModule();
+  await _initProfileModule();
+  await _initAppointmentModule();
+  await _initMyAppointmentsModule();
+  await _initChatModule();
 }
 
-Future<void> _initHiveService() async {
-  serviceLocator.registerLazySingleton(() => HiveServices());
-}
-
+// Splash Module
 Future<void> _initSplashModule() async {
   serviceLocator.registerFactory(() => SplashViewModel());
 }
 
+// User Module
 Future<void> _initUserModule() async {
-  // Core ApiService for HTTP calls
-  serviceLocator.registerLazySingleton(() => ApiService(Dio()));
-
-  // Remote Data Source (calls backend API)
-  serviceLocator.registerFactory(
+  serviceLocator.registerFactory<UserRemoteDatasource>(
     () => UserRemoteDatasource(apiService: serviceLocator<ApiService>()),
   );
 
-  // Remote Repository (implements IUserRepository)
-  serviceLocator.registerFactory(
-    () => UserRemoteRepository(userRemoteDatasource: serviceLocator<UserRemoteDatasource>()),
-  );
-
-  // Local Data Source & Repository (optional, for caching)
-  serviceLocator.registerFactory(
+  serviceLocator.registerFactory<UserLocalDataSource>(
     () => UserLocalDataSource(hiveServices: serviceLocator<HiveServices>()),
   );
 
-  serviceLocator.registerFactory(
-    () => UserLocalRepository(userLocalDataSource: serviceLocator<UserLocalDataSource>()),
+  serviceLocator.registerFactory<UserRemoteRepository>(
+    () => UserRemoteRepository(
+      userRemoteDatasource: serviceLocator<UserRemoteDatasource>(),
+    ),
   );
 
-  // UseCases — use RemoteRepository to actually call backend
-  serviceLocator.registerFactory(
-    () => UserRegisterUseCase(userRepository: serviceLocator<UserRemoteRepository>()),
+  serviceLocator.registerFactory<UserLocalRepository>(
+    () => UserLocalRepository(
+      userLocalDataSource: serviceLocator<UserLocalDataSource>(),
+    ),
   );
 
-  serviceLocator.registerFactory(
-    () => UserLoginUsecase(userRepository: serviceLocator<UserRemoteRepository>()),
+  serviceLocator.registerFactory<UserRegisterUseCase>(
+    () => UserRegisterUseCase(
+      userRepository: serviceLocator<UserRemoteRepository>(),
+    ),
   );
 
-  // ViewModels
-  serviceLocator.registerLazySingleton(
-    () => RegisterViewModel(registerUseCase: serviceLocator<UserRegisterUseCase>()),
+  serviceLocator.registerFactory<UserLoginUsecase>(
+    () => UserLoginUsecase(
+      userRepository: serviceLocator<UserRemoteRepository>(),
+    ),
   );
 
-  serviceLocator.registerFactory(
+  serviceLocator.registerLazySingleton<RegisterViewModel>(
+    () => RegisterViewModel(
+      registerUseCase: serviceLocator<UserRegisterUseCase>(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoginViewModel>(
     () => LoginViewModel(serviceLocator<UserLoginUsecase>()),
   );
 }
 
-// Doctor feature setup
-void _initDoctorModule() {
-  // Remote data source (register concrete type)
+// Doctor Module
+Future<void> _initDoctorModule() async {
   serviceLocator.registerLazySingleton<DoctorRemoteDataSource>(
     () => DoctorRemoteDataSource(apiService: serviceLocator<ApiService>()),
   );
 
-  // Repository (request concrete data source)
   serviceLocator.registerLazySingleton<IDoctorRepository>(
     () => DoctorRemoteRepository(
       doctorRemoteDatasource: serviceLocator<DoctorRemoteDataSource>(),
     ),
   );
 
-  // Use cases
   serviceLocator.registerLazySingleton<GetAllDoctorsUseCase>(
     () => GetAllDoctorsUseCase(repository: serviceLocator<IDoctorRepository>()),
   );
 
   serviceLocator.registerLazySingleton<GetDoctorsBySpecialityUseCase>(
-    () => GetDoctorsBySpecialityUseCase(repository: serviceLocator<IDoctorRepository>()),
+    () => GetDoctorsBySpecialityUseCase(
+      repository: serviceLocator<IDoctorRepository>(),
+    ),
   );
 
-  // Bloc
   serviceLocator.registerFactory<DoctorBloc>(
     () => DoctorBloc(
       getAllDoctorsUseCase: serviceLocator<GetAllDoctorsUseCase>(),
-      getDoctorsBySpecialityUseCase: serviceLocator<GetDoctorsBySpecialityUseCase>(),
+      getDoctorsBySpecialityUseCase:
+          serviceLocator<GetDoctorsBySpecialityUseCase>(),
+    ),
+  );
+}
+
+// Profile Module
+Future<void> _initProfileModule() async {
+  serviceLocator.registerLazySingleton<IUserProfileRemoteDataSource>(
+    () => UserProfileRemoteDataSourceImpl(
+      apiService: serviceLocator<ApiService>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<IUserProfileRepository>(
+    () => UserProfileRepositoryImpl(
+      remoteDataSource: serviceLocator<IUserProfileRemoteDataSource>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<GetProfileUseCase>(
+    () => GetProfileUseCase(serviceLocator<IUserProfileRepository>()),
+  );
+
+  serviceLocator.registerLazySingleton<UpdateProfileUseCase>(
+    () => UpdateProfileUseCase(serviceLocator<IUserProfileRepository>()),
+  );
+
+  serviceLocator.registerFactory<ProfileBloc>(
+    () => ProfileBloc(
+      getProfileUseCase: serviceLocator<GetProfileUseCase>(),
+      updateProfileUseCase: serviceLocator<UpdateProfileUseCase>(),
+    ),
+  );
+}
+
+// Appointment Module
+Future<void> _initAppointmentModule() async {
+  serviceLocator.registerLazySingleton<AppointmentRemoteDataSourceImpl>(
+    () => AppointmentRemoteDataSourceImpl(
+      client: serviceLocator<http.Client>(),
+      apiService: serviceLocator<ApiService>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<IAppointmentRepository>(
+    () => AppointmentRepositoryImpl(
+      remoteDataSource: serviceLocator<AppointmentRemoteDataSourceImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<BookAppointmentUseCase>(
+    () => BookAppointmentUseCase(
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+      repository: serviceLocator<IAppointmentRepository>(),
+    ),
+  );
+
+  serviceLocator.registerFactory<AppointmentBloc>(
+    () => AppointmentBloc(
+      bookAppointmentUseCase: serviceLocator<BookAppointmentUseCase>(),
+    ),
+  );
+}
+
+// MyAppointments Module
+Future<void> _initMyAppointmentsModule() async {
+  // Remote data source
+  serviceLocator.registerLazySingleton<MyAppointmentRemoteDataSource>(
+    () => MyAppointmentRemoteDataSourceImpl(
+      client: serviceLocator<http.Client>(),
+    ),
+  );
+
+  // Repository
+  serviceLocator.registerLazySingleton<IMyAppointmentRepository>(
+    () => MyAppointmentRepositoryImpl(
+      remoteDataSource: serviceLocator<MyAppointmentRemoteDataSource>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  // Use cases
+  serviceLocator.registerLazySingleton<GetUserAppointmentsUseCase>(
+    () => GetUserAppointmentsUseCase(
+      repository: serviceLocator<IMyAppointmentRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<CancelUserAppointmentUseCase>(
+    () => CancelUserAppointmentUseCase(
+      repository: serviceLocator<IMyAppointmentRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  // Bloc
+  serviceLocator.registerFactory<MyAppointmentsBloc>(
+    () => MyAppointmentsBloc(
+      getUserAppointmentsUseCase: serviceLocator<GetUserAppointmentsUseCase>(),
+      cancelUserAppointmentUseCase:
+          serviceLocator<CancelUserAppointmentUseCase>(),
+    ),
+  );
+}
+
+// Chat Module
+Future<void> _initChatModule() async {
+  // Register ChatRemoteDataSource
+  serviceLocator.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(apiService: serviceLocator<ApiService>()),
+  );
+
+  // Register ChatRepository
+  serviceLocator.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(
+      remoteDataSource: serviceLocator<ChatRemoteDataSource>(),
+    ),
+  );
+
+  // Register UseCases
+  serviceLocator.registerLazySingleton<GetMessagesUseCase>(
+    () => GetMessagesUseCase(serviceLocator<ChatRepository>()),
+  );
+
+  serviceLocator.registerLazySingleton<SendMessageUseCase>(
+    () => SendMessageUseCase(serviceLocator<ChatRepository>()),
+  );
+
+  // Register ChatBloc
+  serviceLocator.registerFactory<ChatBloc>(
+    () => ChatBloc(
+      getMessagesUseCase: serviceLocator<GetMessagesUseCase>(),
+      sendMessageUseCase: serviceLocator<SendMessageUseCase>(), 
+        tokenHelper: serviceLocator<TokenHelper>(),
+      
     ),
   );
 }
