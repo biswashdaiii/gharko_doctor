@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:gharko_doctor/app/service_locator/service_locator.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signin_screen.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_view_model.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
@@ -22,7 +22,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         MaterialPageRoute(
           builder: (_) => BlocProvider<LoginViewModel>(
             create: (_) => serviceLocator<LoginViewModel>(),
-            child: SigninScreen(),
+            child: LoginScreen(),
           ),
         ),
       );

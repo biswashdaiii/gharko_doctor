@@ -11,18 +11,17 @@ class UserLocalRepository implements IUserRepository{
     required UserLocalDataSource userLocalDataSource,
   }) : _userLocalDataSource = userLocalDataSource;
 
+ 
   @override
-  UserEntity? getCurrentUser(String email) {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, String>> loginUser(String username, String password) async {
-    if (username == 'biswash@gmail.com' && password == 'bbbbbb') {
-      return Right('dummy_user_id_123');
-    } else {
-      return Left(LocalDatabaseFailure(message: 'Invalid credentials.'));
+  Future<Either<Failure, String>> loginUser(String email, String password) async {
+    try {
+      final result = await _userLocalDataSource.loginUser(
+        email,
+        password,
+      );
+      return Right(result);
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: "Failed to login: $e"));
     }
   }
 
@@ -34,5 +33,11 @@ class UserLocalRepository implements IUserRepository{
     } catch (e) {
       return Left(LocalDatabaseFailure(message: 'Registration failed: $e'));
     }
+  }
+  
+  @override
+  Future<Either<Failure, UserEntity>> getCurrentUser() {
+    // TODO: implement getCurrentUser
+    throw UnimplementedError();
   }
 }

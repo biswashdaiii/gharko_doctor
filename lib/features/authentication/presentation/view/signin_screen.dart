@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gharko_doctor/app/service_locator/service_locator.dart';
 import 'package:gharko_doctor/features/authentication/presentation/view/signup_screen.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_event.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_state.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/signin_view_model.dart';
-import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_view_model.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_event.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/sigin_view_model/login_state.dart';
+import 'package:gharko_doctor/features/authentication/presentation/view_model/signup_view_model/register_view_model.dart';
 
-class SigninScreen extends StatelessWidget {
-  SigninScreen({super.key});
+
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -20,7 +21,7 @@ class SigninScreen extends StatelessWidget {
       context.read<LoginViewModel>().add(
         LoginWithEmailAndPasswordEvent(
           context: context,
-          username: emailController.text.trim(),
+          email: emailController.text.trim(),
           password: passwordController.text.trim(),
         ),
       );
@@ -172,11 +173,11 @@ class SigninScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder:
-                                      (_) => BlocProvider<SignupViewModel>(
+                                      (_) => BlocProvider<RegisterViewModel>(
                                         create:
                                             (_) =>
                                                 serviceLocator<
-                                                  SignupViewModel
+                                                  RegisterViewModel
                                                 >(),
                                         child: SignupPage(),
                                       ),

@@ -1,30 +1,23 @@
-import 'package:equatable/equatable.dart';
-
-class SignupState extends Equatable {
+class RegisterState  {
   final bool isLoading;
   final bool isSuccess;
 
-  const SignupState({
+  const RegisterState({
     this.isLoading = false,
     this.isSuccess = false,
   });
-  const SignupState.initial()
+  const RegisterState.initial()
       : isLoading = false,
         isSuccess = false;
-  SignupState copyWith({
+  RegisterState copyWith({
     bool? isLoading,
     bool? isSuccess,
   }) {
-    return SignupState(
+    return RegisterState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
     );
   }
   
-  @override
-  // TODO: implement props
-  List<Object?> get props => [
-    isLoading,
-    isSuccess,
-  ];
+ 
 }

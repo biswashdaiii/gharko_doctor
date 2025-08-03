@@ -16,11 +16,11 @@ class HiveServices {
   }
 
   //Authentication queries
-    Future<void> register(UserHiveModel auth) async {
+    Future<void> registerUser(UserHiveModel user) async {
     var box = await Hive.openBox<UserHiveModel>(
       HiveTableConstant.userBox,
     );
-    await box.put(auth.userId, auth);
+    await box.put(user.userId, user);
   }
 
   // Future<void> deleteAuth(String id) async {
@@ -38,21 +38,17 @@ class HiveServices {
   // }
 
   // Login using username and password
-  Future<UserHiveModel?> login(String username, String password) async {
+  Future<UserHiveModel?> loginUSer(String email, String password) async {
   var box = await Hive.openBox<UserHiveModel>(
     HiveTableConstant.userBox,
   );
-
-  try {
-    var user = box.values.firstWhere(
-      (element) => element.username == username && element.password == password,
+   var user = box.values.firstWhere(
+      (element) => element.email == email && element.password == password,
+      orElse: () => throw Exception('Invalid username or password'),
     );
+    box.close();
     return user;
-  } catch (e) {
-    return null;
-  } finally {
-    await box.close();
-  }
+
 }
 
 }
